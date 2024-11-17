@@ -1,1 +1,51 @@
-.vs
+# User-specific folders
+/.vs/
+
+# Build folders
+Debug/
+Release/
+x64/
+x86/
+ARM/
+ARM64/
+
+# Build result files
+*.obj
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.idb
+*.lib
+*.pch
+*.tmp
+*.log
+
+# Visual Studio generated files
+*.vcxproj.user
+*.vcxproj.filters
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+*.dir/
+
+# Temporary and backup files
+*.tmp
+*.bak
+*.old
+*.sln.docstates
+
+# Package management
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+.nuget/
