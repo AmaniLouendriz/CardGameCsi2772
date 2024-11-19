@@ -3,7 +3,10 @@
 #include <vector>
 #include <typeinfo>
 #include <regex> // need to extract the type of an object from typeid
+#include <string>
 #include "Card.h"
+#include "CardFactory.h"
+
 
 
 // PLEASE KEEP COMMENTS FOR NOW, ILL REMOVE THEN ONCE ETH IS DONE
@@ -32,14 +35,41 @@ public:
 		std::regex pattern("[^class(\s)+]+"); // extract the type of a card class using regex
 		std::smatch matches;
 		std::string s = typeid(T).name();
-	    if (std::regex_search(s, matches, pattern)) {
+		if (std::regex_search(s, matches, pattern)) {
 			//std::cout << "the matches are: " << matches[0] << " \n";
-			strcpy_s(typeCards,sizeof(typeCards), matches[0].str().c_str());
+			strcpy_s(typeCards, sizeof(typeCards), matches[0].str().c_str());
 		}
 		//std::cout << "The type is: " << typeCards << "\n";
 	}
 
-	//Chain(std::istream&, const CardFactory*);   this gives a problem for some reason, to investigate
+	/// <summary>
+	/// A constructor that takes input from a file and reconstructs the chain from the file: example of line on the file: Red R R R R
+	/// </summary>
+	/// <param name="input">The file input stream from where we are reading out chain</param>
+	/// <param name="factory">Object that has the responsability to build cards</param>
+	
+	Chain(std::istream& input, const CardFactory* factory);
+
+	/// <summary>
+	/// Copy constructor
+	/// </summary>
+	/// <param name="ch">Chain to copy attributes from</param>
+	
+	Chain(const Chain& ch) {
+		// std::cout << "une recopie se fait";
+
+		strcpy_s(typeCards, sizeof(typeCards),ch.typeCards);// copy the type of cards
+		for (Card* item : ch.list) {
+			list.push_back(item); // fill vector
+		}
+	}
+
+
+	~Chain() {
+		//delete typeCards;
+		std::cout << "I am the chain destructor\n";
+		//delete typeCards;
+	}
 
 	/// <summary>
 	/// This redefinition of += adds a new card to a chain
@@ -49,9 +79,9 @@ public:
 	Chain<T>& operator+=(Card*);
 
 	/// <summary>
-	/// TODO
+	/// Member function that calculates the amount of money a player would be given if he ever decided to sell his chain in a trade
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>Amount of money given to the seller after a card trade </returns>
 	int sell();
 
 	/// <summary>
@@ -62,6 +92,7 @@ public:
 	/// <returns>a reference to the output stream where the reference took place</returns>
 	/// 
 	friend std::ostream& operator << (std::ostream& output, Chain<T> ch) {
+		// ch is copied by value here, copy constructor used
 		output << "Elements de la liste vector: \n";
 		output << ch.typeCards << "\t";
 
@@ -73,6 +104,36 @@ public:
 		return output;
 	}
 };
+
+template <class T> Chain<T>::Chain(std::istream& input, const CardFactory* factory) {
+	std::string typeOfCard{}; // Rethink using string here
+
+	//if (input.is_open()) {
+		std::getline(input, typeOfCard, '\t');
+		bool ok{ true };
+		char card{ 'X' };
+
+		if ((typeOfCard != "Blue") && (typeOfCard != "Chili") && (typeOfCard != "Stink") && (typeOfCard != "Green") && (typeOfCard != "Soy")
+			&& (typeOfCard != "Black") && (typeOfCard != "Red") && (typeOfCard != "Garden")) {
+			ok = false; // corrupted file
+		}
+
+		//std::cout << "generating the chaine:  ";
+
+		if (ok) {
+			while (input >> card) {
+				/*std::cout << card;
+				std::cout << " ";*/
+				Card* redCard = factory->getRed();
+				list.push_back(redCard);
+			}
+		}
+	//}
+	//else {
+		//std::cout << "ouverture impossible \n";
+	//}
+
+}
 
 template <class T> Chain<T>& Chain<T>::operator+=(Card* cardToAdd) {
 		try {
@@ -88,7 +149,32 @@ template <class T> Chain<T>& Chain<T>::operator+=(Card* cardToAdd) {
 }
 
 template <class T> int Chain<T>::sell(){
-	return 1;
+	int sizeOfChain { static_cast <int>(list.size()) };
+
+	//std::cout << "\nThe size of chain in the sell method is: " << sizeOfChain;
+
+	// assuming the list is non empty
+	int maxCoins{ 4 };
+	int requiredCards{}; // cards returned by Card::getCardsPerCoin(int coins)
+	int moneyToEarn{}; // amount given to a seller after a trade
+	int similarCards{}; // on each iteration, we divide the size of a chain by the number of required cards, the division gives us the parts of cards that have similar numbers, so we count the 
+	// money for both parts, and we continue further iterations using the rest of this division (cards that didnt match the amount of required cards we need)
+	int restOfCards{};
+
+
+	while (maxCoins >= 1) {
+		requiredCards = (*(list.at(0))).getCardsPerCoin(maxCoins);
+		restOfCards = sizeOfChain % requiredCards;
+		similarCards = sizeOfChain / requiredCards;
+		moneyToEarn += (maxCoins * similarCards);
+		sizeOfChain = restOfCards;
+		maxCoins--;
+
+		if (sizeOfChain == 0) {
+			break;
+		}
+	}
+	return moneyToEarn;
 }
 
 

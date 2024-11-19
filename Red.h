@@ -13,4 +13,5 @@ public:
 		out << 'R';
 	}
 
+	int getCardsPerCoin(int coins);
 };

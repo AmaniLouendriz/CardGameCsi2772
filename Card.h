@@ -11,6 +11,8 @@ public:
 		std::cout << "I am the Card constructor\n";
 	}
 
+	virtual int getCardsPerCoin(int coins) = 0;
+
 	virtual void print(std::ostream& out) = 0;
 
 };

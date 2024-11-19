@@ -140,10 +140,20 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="black.h" />
+    <ClInclude Include="Blue.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardFactory.h" />
     <ClInclude Include="Chain.h" />
+    <ClInclude Include="Chili.h" />
+    <ClInclude Include="garden.h" />
+    <ClInclude Include="Green.h" />
     <ClInclude Include="Red.h" />
+    <ClInclude Include="soy.h" />
+    <ClInclude Include="Stink.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ChainRed.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
