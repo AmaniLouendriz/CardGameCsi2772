@@ -8,7 +8,7 @@
 class Card {
 public:
 	Card() {
-		std::cout << "I am the Card constructor\n";
+		//std::cout << "I am the Card constructor\n";
 	}
 
 	virtual int getCardsPerCoin(int coins) = 0;

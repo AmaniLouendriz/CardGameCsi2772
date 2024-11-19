@@ -1,0 +1,2 @@
+Cards present in the deck: 
+R R R R R R 

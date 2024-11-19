@@ -10,6 +10,9 @@
 #include "black.h"
 #include "garden.h"
 #include "Card.h"
+#include "Deck.h"
+
+class Deck;
 
 class CardFactory {
 	static CardFactory* instance;
@@ -26,8 +29,9 @@ class CardFactory {
 public:
 	CardFactory(const CardFactory&) = delete;// copy constructor deleted
 	CardFactory& operator=(const CardFactory&) = delete;
+	~CardFactory();
 	Red* getRed() const;
+	Deck getDeck() const;
 	// should add getters for other colors as well TODO
 	static CardFactory* getFactory(); // should verify whether the object is already created, if yes, return a pointer to it. if not, create it using the constructor and return its pointer
-	
 };

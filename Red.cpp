@@ -5,7 +5,7 @@
 // YOU CAN UPDATE IT WITH YOUR CURRENT CHANGES
 
 Red::Red() : Card() {
-	std::cout << "I am the constructor of Red \n";
+	//std::cout << "I am the constructor of Red \n";
 }
 
 int Red::getCardsPerCoin(int coins) {

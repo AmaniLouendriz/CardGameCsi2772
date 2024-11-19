@@ -133,6 +133,7 @@
     <ClCompile Include="CardFactory.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="AmaniTests.cpp" />
+    <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Red.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="CardFactory.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Chili.h" />
+    <ClInclude Include="Deck.h" />
     <ClInclude Include="garden.h" />
     <ClInclude Include="Green.h" />
     <ClInclude Include="Red.h" />
