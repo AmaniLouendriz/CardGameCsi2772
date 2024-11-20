@@ -1,7 +1,10 @@
-#include "Card.h"
+#pragma once
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include <string>
+#include "Card.h"
+
 
 
 

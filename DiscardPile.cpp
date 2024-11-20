@@ -1,3 +1,4 @@
+#pragma once
 #include "DiscardPile.h"
 #include "CardFactory.h"
 #include "Card.h"

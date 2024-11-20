@@ -1,4 +1,4 @@
-#pragma once
-class black {
-
-};
+//#pragma once
+//class black {
+//
+//};

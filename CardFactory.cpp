@@ -1,6 +1,3 @@
-#include <iostream>
-#include <algorithm>
-#include <random>
 #include "CardFactory.h"
 
 CardFactory* CardFactory::instance{ nullptr };// init to null
@@ -14,9 +11,29 @@ std::vector<garden*> CardFactory::gardenCards{};
 std::vector<Red*> CardFactory::redCards{};
 
 
+std::random_device CardFactory::rd{};
+std::default_random_engine CardFactory::rng{rd()};
+int CardFactory::redCount   { 8 };
+int CardFactory::blueCount  { 20 };
+int CardFactory::chiliCount { 18 };
+int CardFactory::stinkCount { 16 };
+int CardFactory::greenCount { 14 };
+int CardFactory::soyCount   { 12 };
+int CardFactory::blackCount { 10 };
+int CardFactory::gardenCount { 6 };
+int const CardFactory::RED_COUNT {8};
+int const CardFactory::BLUE_COUNT {20};
+int const CardFactory::CHILI_COUNT {18};
+int const CardFactory::STINK_COUNT {16};
+int const CardFactory::GREEN_COUNT{ 14 };
+int const CardFactory::SOY_COUNT {12};
+int const CardFactory::BLACK_COUNT {10};
+int const CardFactory::GARDEN_COUNT {6};
+
+
 CardFactory::CardFactory() {
 	// it would be called exactly once
-	std::cout << "I am the card factory constructor\n";
+	//std::cout << "I am the card factory constructor\n";
 	// Toutes les cartes doivent etre crees en nombre necessaires pour le jeu
 
 	// Create blue cards
@@ -69,15 +86,13 @@ CardFactory::CardFactory() {
 }
 
 CardFactory::~CardFactory() {
-	std::cout << "I am the card factory destructor\n";
+	//std::cout << "I am the card factory destructor\n";
 
 	for (Card* item : redCards) {
 		delete item;
 	}
 
-	// UNCOMMENT when ALL CARD CLASSES ARE IMPLEMENTED
-
-	/*for (Card* item : gardenCards) {
+	for (Card* item : gardenCards) {
 		delete item;
 	}
 
@@ -105,7 +120,7 @@ CardFactory::~CardFactory() {
 
 	for (Card* item : blueCards) {
 		delete item;
-	}	*/
+	}
 }
 
 CardFactory* CardFactory::getFactory() {
@@ -116,29 +131,94 @@ CardFactory* CardFactory::getFactory() {
 }
 
 Red* CardFactory::getRed() const {
-	Red* item { redCards.back() };
-	redCards.pop_back();
+	Red* item { redCards.at(redCount-1)};
+	redCount--;
+	if (redCount == 0) {
+		redCount = RED_COUNT;
+	}
+	return item;
+}
+
+Blue* CardFactory::getBlue() const {
+	Blue* item{ blueCards.at(blueCount - 1) };
+	blueCount--;
+	if (blueCount == 0) {
+		blueCount = BLUE_COUNT;
+	}
+	return item;
+}
+
+Chili* CardFactory::getChili() const {
+	Chili* item{ chiliCards.at(chiliCount - 1) };
+	chiliCount--;
+	if (chiliCount == 0) {
+		chiliCount = CHILI_COUNT;
+	}
+	return item;
+}
+
+Stink* CardFactory::getStink() const {
+	Stink* item{ stinkCards.at(stinkCount - 1) };
+	stinkCount--;
+	if (stinkCount == 0) {
+		stinkCount = STINK_COUNT;
+	}
+	return item;
+}
+
+Green* CardFactory::getGreen() const {
+	Green* item{ greenCards.at(greenCount - 1) };
+	greenCount--;
+	if (greenCount == 0) {
+		greenCount = GREEN_COUNT;
+	}
+	return item;
+}
+
+soy* CardFactory::getSoy() const {
+	soy* item{ soyCards.at(soyCount - 1) };
+	soyCount--;
+	if (soyCount == 0) {
+		soyCount = SOY_COUNT;
+	}
+	return item;
+}
+
+black* CardFactory::getBlack() const {
+	black* item{ blackCards.at(blackCount - 1) };
+	blackCount--;
+	if (blackCount == 0) {
+		blackCount = BLACK_COUNT;
+	}
+	return item;
+}
+
+garden* CardFactory::getGarden() const {
+	garden* item{ gardenCards.at(gardenCount - 1) };
+	gardenCount--;
+	if (gardenCount == 0) {
+		gardenCount = GARDEN_COUNT;
+	}
 	return item;
 }
 
 Deck CardFactory::getDeck() const{
-	std::cout << "Inside the getDeck\n";
+	//std::cout << "Inside the getDeck\n";
 	Deck myDeck;
-	auto rng = std::default_random_engine{};
-	// UNCOMMENT WHEN THE CLASSES ARE IMPLEMENTED
-	/*for (Card* item : blueCards) {
+
+	for (Card* item : blueCards) {
 		myDeck.push_back(item);
-	}*/
+	}
 
 	for (Card* item : redCards) {
 		myDeck.push_back(item);
 	}
 
-	/*for (Card* item : chiliCards) {
+	for (Card* item : chiliCards) {
 		myDeck.push_back(item);
-	}*/
+	}
 
-	/*for (Card* item : stinkCards) {
+	for (Card* item : stinkCards) {
 		myDeck.push_back(item);
 	}
 
@@ -155,8 +235,8 @@ Deck CardFactory::getDeck() const{
 	}
 
 	for (Card* item : gardenCards) {
-		myDeck.push_back(card);
-	}*/
+		myDeck.push_back(item);
+	}
 
 	std::shuffle(std::begin(myDeck), std::end(myDeck), rng);
 	return myDeck;

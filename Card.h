@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <fstream>
 
@@ -19,6 +20,8 @@ public:
         card.print(out);
         return out;
     };
+
+    // DELETE COPY CONSTRUCTOR AND ASSIGNMENET OPERATOR HERE
 };
 
 //Classe pour la carte Blue

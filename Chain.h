@@ -93,7 +93,7 @@ public:
 	/// 
 	friend std::ostream& operator << (std::ostream& output, Chain<T> ch) {
 		// ch is copied by value here, copy constructor used
-		output << "Elements de la liste vector: \n";
+		// output << "Elements de la liste vector: \n";
 		output << ch.typeCards << "\t";
 
 		for (int i{ 0 }; i < ch.list.size(); i++) {
@@ -119,6 +119,8 @@ template <class T> Chain<T>::Chain(std::istream& input, const CardFactory* facto
 		}
 
 		//std::cout << "generating the chaine:  ";
+
+		// UPDATE THIS TODO
 
 		if (ok) {
 			while (input >> card) {

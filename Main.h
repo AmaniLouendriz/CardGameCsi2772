@@ -4,9 +4,9 @@
 #include "DiscardPile.h"
 #include "Hand.h"
 #include "Chain.h"
-#include "Player.h"
+//#include "Player.h"
 #include "Table.h"
-#include "TradeArea.h"
+//#include "TradeArea.h"
 #include <iostream>
 #include <string.h>
 #include <vector>

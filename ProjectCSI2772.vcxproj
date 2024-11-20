@@ -134,7 +134,10 @@
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="AmaniTests.cpp" />
     <ClCompile Include="Deck.cpp" />
+    <ClCompile Include="DiscardPile.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Red.cpp" />
+    <ClCompile Include="Table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -148,14 +151,18 @@
     <ClInclude Include="Chain.h" />
     <ClInclude Include="Chili.h" />
     <ClInclude Include="Deck.h" />
+    <ClInclude Include="DiscardPile.h" />
     <ClInclude Include="garden.h" />
     <ClInclude Include="Green.h" />
+    <ClInclude Include="Main.h" />
     <ClInclude Include="Red.h" />
     <ClInclude Include="soy.h" />
     <ClInclude Include="Stink.h" />
+    <ClInclude Include="Table.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ChainRed.txt" />
+    <Text Include="DeckText.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

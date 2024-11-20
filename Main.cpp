@@ -4,16 +4,16 @@
 
 using namespace std;
 
-void cleanup(Player* player1, Player* player2, DiscardPile* disPile, TradeArea* tradeArea, Deck* deck, Table* table) {
-    delete player1;
-    delete player2;
-    delete disPile;
-    delete tradeArea;
-    delete deck;
-    delete table;
-}
+//void cleanup(Player* player1, Player* player2, DiscardPile* disPile, TradeArea* tradeArea, Deck* deck, Table* table) {
+//    delete player1;
+//    delete player2;
+//    delete disPile;
+//    delete tradeArea;
+//    delete deck;
+//    delete table;
+//}
 
-int main() {
+/*int main() {
 
     std::string p1_name, p2_name, winner_name;
     const int MAX_NUM_PLAYER = 2;
@@ -151,4 +151,4 @@ int main() {
     delete tb;
 
     return 0;
-}
+}*/
