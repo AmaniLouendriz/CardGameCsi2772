@@ -42,6 +42,9 @@
     <ClCompile Include="DiscardPile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TradeArea.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -93,9 +96,13 @@
     <ClInclude Include="DiscardPile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TradeArea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ChainRed.txt" />
     <Text Include="DeckText.txt" />
+    <Text Include="trade.txt" />
   </ItemGroup>
 </Project>
