@@ -1,8 +1,11 @@
-#include "Card.h"
+#pragma once
+
 #include <queue>
 #include <list>
 #include <sstream>
 #include <cstdlib>
+#include "Card.h"
+#include "CardFactory.h"
 
 class CardFactory;
 
@@ -13,7 +16,7 @@ private:
     //Vide la main du joueur
     void clearHand() {
         while (!playerHand.empty()) {
-            delete playerHand.front();
+            delete playerHand.front();// why do we use delete keyword here?
             playerHand.pop();
         }
     }

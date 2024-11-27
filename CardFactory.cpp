@@ -33,53 +33,53 @@ int const CardFactory::GARDEN_COUNT {6};
 
 CardFactory::CardFactory() {
 	// it would be called exactly once
-	//std::cout << "I am the card factory constructor\n";
-	// Toutes les cartes doivent etre crees en nombre necessaires pour le jeu
+	// std::cout << "I am the card factory constructor\n";
+	// All cards should be created in the necessary count for the game
 
 	// Create blue cards
-	for (int i{ 0 }; i < 20; i++) {
+	for (int i{ 0 }; i < BLUE_COUNT; i++) {
 		Blue* item = new Blue();
 		blueCards.push_back(item);
 	}
 
 	// Create chili cards
-	for (int i{ 0 }; i < 18; i++) {
+	for (int i{ 0 }; i < CHILI_COUNT; i++) {
 		Chili* item = new Chili();
 		chiliCards.push_back(item);// copy constructor involved ?
 	}
 
 	// Create Stink Cards
-	for (int i{ 0 }; i < 16; i++) {
+	for (int i{ 0 }; i < STINK_COUNT; i++) {
 		Stink* item = new Stink();
 		stinkCards.push_back(item);
 	}
 
 	// Create Green  Cards
-	for (int i{ 0 }; i < 14; i++) {
+	for (int i{ 0 }; i < GREEN_COUNT; i++) {
 		Green* item = new Green();
 		greenCards.push_back(item);
 	}
 
 	// Create soy Cards
-	for (int i{ 0 }; i < 12; i++) {
+	for (int i{ 0 }; i < SOY_COUNT; i++) {
 		soy* item = new soy();
 		soyCards.push_back(item);
 	}
 
 	// Create black cards
-	for (int i{ 0 }; i < 10; i++) {
+	for (int i{ 0 }; i < BLACK_COUNT; i++) {
 		black* item = new black();
 		blackCards.push_back(item);
 	}
 
 	// Create garden cards
-	for (int i{ 0 }; i < 6; i++) {
+	for (int i{ 0 }; i < GARDEN_COUNT; i++) {
 		garden* item = new garden();
 		gardenCards.push_back(item);
 	}
 
 	// Create red Cards
-	for (int i{ 0 }; i < 8; i++) {
+	for (int i{ 0 }; i < RED_COUNT; i++) {
 		Red* item = new Red();
 		redCards.push_back(item);
 	}

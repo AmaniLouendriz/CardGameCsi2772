@@ -6,6 +6,7 @@
 #include <string>
 #include "Card.h"
 #include "CardFactory.h"
+#include "Chain_Base.h"
 
 
 
@@ -17,8 +18,8 @@
 /// <typeparam name="T">T should be one of the derived class that inherits from Card</typeparam>
 
 
-template <class T> class Chain {
-	std::vector<Card*> list;  // keeps track of the bean cards
+template <class T> class Chain : public Chain_Base {
+	std::vector<Card*> list;  // keeps track of the bean cards       // those two attributes might go to the interface
 	char typeCards[10]; // keeps track of the type of cards chain is holding
 
 public:
@@ -89,19 +90,35 @@ public:
 	/// </summary>
 	/// <param name="output">output stream where the printing would be done on</param>
 	/// <param name="ch">Chain to print</param>
-	/// <returns>a reference to the output stream where the reference took place</returns>
+	/// <returns>a reference to the output stream where the printing took place</returns>
 	/// 
 	friend std::ostream& operator << (std::ostream& output, Chain<T> ch) {
 		// ch is copied by value here, copy constructor used
 		// output << "Elements de la liste vector: \n";
-		output << ch.typeCards << "\t";
+		output << ch.typeCards << "\t";// maybe three tabs
 
 		for (int i{ 0 }; i < ch.list.size(); i++) {
 			(*(ch.list.at(i))).print(output);
 			output << " ";
 			//output << "type of element in vector: " << typeid(*(ch.list.at(i))).name();
 		}
+		output << "\n";
 		return output;
+	}
+
+
+	/// <summary>
+	/// Method to get the number of cards in a given chain
+	/// </summary>
+	/// <returns>Number of cards in a given chain</returns>
+	int getLengthChain();
+
+	/// <summary>
+	/// TODO
+	/// </summary>
+	/// <param name="output"></param>
+	void print(std::ostream& output) const {
+		output << *this;
 	}
 };
 
@@ -113,14 +130,14 @@ template <class T> Chain<T>::Chain(std::istream& input, const CardFactory* facto
 		bool ok{ true };
 		char card{ 'X' };
 
-		if ((typeOfCard != "Blue") && (typeOfCard != "Chili") && (typeOfCard != "Stink") && (typeOfCard != "Green") && (typeOfCard != "Soy")
-			&& (typeOfCard != "Black") && (typeOfCard != "Red") && (typeOfCard != "Garden")) {
+		if ((typeOfCard != "Blue") && (typeOfCard != "Chili") && (typeOfCard != "Stink") && (typeOfCard != "Green") && (typeOfCard != "soy")
+			&& (typeOfCard != "black") && (typeOfCard != "Red") && (typeOfCard != "garden")) {
 			ok = false; // corrupted file
 		}
 
 		//std::cout << "generating the chaine:  ";
 
-		// UPDATE THIS TODO
+		// UPDATE THIS TODO, also, if card is a line break, stop parsing
 
 		if (ok) {
 			while (input >> card) {
@@ -177,6 +194,15 @@ template <class T> int Chain<T>::sell(){
 		}
 	}
 	return moneyToEarn;
+}
+
+
+/// <summary>
+/// Method to get the number of cards in a given chain
+/// </summary>
+/// <returns>Number of cards in a given chain</returns>
+template <class T> int Chain<T>::getLengthChain() {
+	return list.size();
 }
 
 

@@ -1,7 +1,4 @@
 #include "Table.h"
-#include <fstream>
-#include <stdexcept>
-#include <iostream>
 
 
 //Retourne true si un joueur a gagne en donnant le nom par reference
@@ -28,11 +25,11 @@
 //}
 
 //Joueur par l'ID
-//Player* Table::getPlayer(int id) {
-//    currentPlayer = id;
-//    if (id == 0) return p1;
-//    else return p2;
-//}
+Player* Table::getPlayer(int id) {
+    currentPlayer = id;
+    if (id == 0) return p1;
+    else return p2;
+}
 
 //Enregistre l'etat de la table 
 //void Table::saveTable() {

@@ -34,9 +34,11 @@ public:
     
     //Destructeur
     ~DiscardPile() {
-        for (auto& card : cards) {
+        // cardFactory would delete cards, not here
+
+        /*for (auto& card : cards) {
             delete card;
-        }
+        }*/
     }
 
     void save(std::ostream& out) const;

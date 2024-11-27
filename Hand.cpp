@@ -1,6 +1,4 @@
 #include "Hand.h"
-#include "CardFactory.h"
-
 
 Hand::Hand(std::istream& input, const CardFactory* cardFact) {
     std::string line;
@@ -103,4 +101,9 @@ void Hand::saveHand(std::ofstream& filename) const {
         temp.pop();
     }
     std::cout << "Hand saved." << std::endl;
+}
+
+Hand& Hand::operator+=(Card* card) {
+    playerHand.push(card);
+    return *this;
 }

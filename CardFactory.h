@@ -22,6 +22,9 @@ class CardFactory {
 	static std::default_random_engine rng;
 	static std::random_device rd;
 
+	/// <summary>
+	/// The first 8 counts with lower cases tracks the position of the card we point to
+	/// </summary>
 	static int redCount;
 	static int blueCount;
 	static int chiliCount;
@@ -31,6 +34,9 @@ class CardFactory {
 	static int blackCount;
 	static int gardenCount;
 
+	/// <summary>
+	/// The below constants define the number of cards from each type to produce
+	/// </summary>
 	int static const RED_COUNT;
 	int static const BLUE_COUNT;
 	int static const CHILI_COUNT;
@@ -44,7 +50,7 @@ class CardFactory {
 	CardFactory();// no one can explicitely create this object
 public:
 	CardFactory(const CardFactory&) = delete;// copy constructor deleted
-	CardFactory& operator=(const CardFactory&) = delete;
+	CardFactory& operator=(const CardFactory&) = delete;// assignement constructor deleted
 	~CardFactory();
 	Red* getRed() const;
 	Blue* getBlue() const;
