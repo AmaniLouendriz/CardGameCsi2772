@@ -9,4 +9,9 @@ public:
 	virtual int sell() = 0;
 	virtual int getLengthChain() = 0;
 	virtual void print(std::ostream& output) const = 0;
+
+	virtual const char* getChainType() const = 0;
+
+	virtual Chain_Base& operator+=(Card*) = 0;
+
 };

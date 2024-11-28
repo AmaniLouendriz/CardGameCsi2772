@@ -28,7 +28,15 @@ public:
         :p1(&player1), p2(&player2), disPile(&discardPile), tradeAr(&tradeArea), deck(&deck), cardFact(&cardFactory), currentPlayer(0){}
     
     //Destructeur
-    ~Table() = default;
+    // TODO, why is it just default ?  I changed it from just default to this, do I have to delete other objects other than cardFact
+    ~Table() {
+        delete cardFact;
+        delete deck;
+        delete tradeAr;
+        delete disPile;
+        delete p2;
+        delete p1;
+    }
 
     bool win(std::string&);
     void printHand(bool);

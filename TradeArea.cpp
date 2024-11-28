@@ -111,17 +111,27 @@ int TradeArea::numCards() {
 /// <returns>A reference to the file or the stream that we used to write on</returns>
 std::ostream& operator << (std::ostream& output, TradeArea trade) {
 	int i = 1;
-	for (Card* card : trade.container) {
-		card->print(output);
-		output << " ";
-		i++;
-		if (i == 20) {
-			output << "\n"; // print at max 20 columns?
-			i = 1;
+	if (trade.container.size() != 0) {
+		for (Card* card : trade.container) {
+			card->print(output);
+			output << " ";
+			i++;
+			if (i == 20) {
+				output << "\n"; // print at max 20 columns?
+				i = 1;
+			}
 		}
+	}
+	else {
+		output << "-------";
 	}
 	output << "\n";
 	return output;
+}
+
+
+std::list<Card*> TradeArea::getListOfCards() {
+	return container;
 }
 
 

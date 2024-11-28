@@ -5,7 +5,7 @@
 
 
 
-DiscardPile::DiscardPile(std::istream& input, const CardFactory* cardFact) {
+DiscardPile::DiscardPile(std::istream& input, const CardFactory* cardFact) {// TODO, this should change, we dont instantiate cards here
     std::string line;
     while (std::getline(input, line)) {
         Card* card = nullptr;
@@ -51,6 +51,9 @@ void DiscardPile::print(std::ostream& os) const {
 std::ostream& operator<<(std::ostream& os, const DiscardPile& disPile) {
     if (!disPile.cards.empty()) {
         disPile.cards.back()->print(os);
+    }
+    else {
+        os << "-------";
     }
     return os;
 }

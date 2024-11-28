@@ -10,7 +10,7 @@ class CardFactory;
 /// </summary>
 /// <param name="d">Deck to copy into the new deck</param>
 Deck::Deck(const Deck& d) {
-	std::cout << "Deck copy constructor for deck\n";
+	//std::cout << "Deck copy constructor for deck\n";
 	for (Card* card : d) {
 		push_back(card);
 	}
@@ -70,7 +70,7 @@ Deck::Deck(std::istream& input, const CardFactory* factory) {
 /// Deck destructor
 /// </summary>
 Deck::~Deck() {
-	std::cout << "\ndestructing my deck\n";
+	//std::cout << "\ndestructing my deck\n";
 }
 
 

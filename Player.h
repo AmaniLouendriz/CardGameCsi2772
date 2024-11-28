@@ -3,6 +3,7 @@
 #include <vector>
 #include "Chain.h"
 #include "Hand.h"
+#include "Utils.h"
 
 class Player {
 	std::string playerName;// TODO: not sure whether this should be a reference or no
@@ -99,5 +100,23 @@ public:
 	/// </summary>
 	/// <param name="card"></param>
 	/// <returns></returns>
-	Hand& getHand();
+	Hand& addCardToHand(Card* card);
+
+
+	Hand& getHand() {
+		// HAND SHOULD BE PRIVATE, JUST FOR DEBUGGING PURPOSES
+		return *playerHand;
+	}
+
+
+	int addCardToChain(char symbol);
+
+
+
+	void playCard();
+
+
+
+
 };
+

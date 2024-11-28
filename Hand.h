@@ -16,7 +16,7 @@ private:
     //Vide la main du joueur
     void clearHand() {
         while (!playerHand.empty()) {
-            delete playerHand.front();// why do we use delete keyword here?
+            delete playerHand.front();// why do we use delete keyword here? TODO
             playerHand.pop();
         }
     }
@@ -49,4 +49,6 @@ public:
     ~Hand() {
         clearHand();
     }
+
+    int doesCardExist(char cc);
 };

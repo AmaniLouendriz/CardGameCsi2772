@@ -22,7 +22,7 @@ public:
     //Ajoute la carte au dessus
     DiscardPile& operator+=(Card* c);
     
-    ////Enleve et met la carte au dessus
+    //Enleve et met la carte au dessus
     Card* pickUp();
 
     Card* top() const;
@@ -34,7 +34,7 @@ public:
     
     //Destructeur
     ~DiscardPile() {
-        // cardFactory would delete cards, not here
+        // cardFactory would delete cards, not here   TODO
 
         /*for (auto& card : cards) {
             delete card;
@@ -43,7 +43,7 @@ public:
 
     void save(std::ostream& out) const;
     //Retourne le nombre de cartes
-    size_t size() const {
+    size_t size() const {   // why not int TODO
         return cards.size();
     }
 

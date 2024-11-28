@@ -81,11 +81,19 @@ void Table::reloadTradeArea() {
 
 
 //Afficher les informations de la table
-//std::ostream& operator<<(std::ostream& output, const Table& tb) {
-//    output << "Player 1:\n" << tb.p1 << "\n";
-//    output << "Player 2:\n" << tb.p2 << "\n";
-//    output << "Discard Pile (Top): " << tb.disPile << "\n";
-//    output << "Trade Area: " << tb.tradeAr << "\n";
-//    output << "_______________________\n";
-//    return output;
-//}
+std::ostream& operator<<(std::ostream& output, const Table& tb) {
+    // just show the current player
+    // discard pile and trade area do not print for some reason
+    if (tb.currentPlayer == 0) {
+        output << "Player 1:\n" << *(tb.p1) << "\n";
+    }
+    else {
+        output << "Player 2:\n" << *(tb.p2) << "\n";
+    }
+    output << "Deck: \n";
+    output << *(tb.deck) << "\n";
+    output << "Discard Pile (Top): " << *(tb.disPile) << "\n";
+    output << "Trade Area: " << *(tb.tradeAr) << "\n";
+    output << "_______________________\n";
+    return output;
+}

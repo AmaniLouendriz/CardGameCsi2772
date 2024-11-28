@@ -67,7 +67,7 @@ Card* Hand::operator[](int pos) {
         }
     }
 
-    playerHand = temp;
+    playerHand = temp;// TODO, SUSPICIOUS ABOUT THIS WHITH NO COPY CONSTRUCTORif
     return card;
 }
 
@@ -85,6 +85,8 @@ std::ostream& operator<<(std::ostream& os, const Hand& hand) {
         os << " ";
         temp.pop();
     }
+
+    os << "\n";
 
     return os;
 }
@@ -106,4 +108,19 @@ void Hand::saveHand(std::ofstream& filename) const {
 Hand& Hand::operator+=(Card* card) {
     playerHand.push(card);
     return *this;
+}
+
+int Hand::doesCardExist(char cc) {   // verify that this card exist before trying to remove it
+    std::queue <Card*, std::list<Card*>> temp;
+    temp = playerHand; // TODO, I dont think this is fine
+    int indexOfCard{ -1 };
+    for (int i{ 0 }; i < temp.size(); i++) {
+        if (temp.front()->getName()[0] == cc) {
+            // we found the card
+            indexOfCard = i;
+            break;
+        }
+        temp.pop();
+    }
+    return indexOfCard;
 }

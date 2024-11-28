@@ -2,8 +2,6 @@
 #include <iostream>
 #include <vector>
 #include <typeinfo>
-#include <regex> // need to extract the type of an object from typeid
-#include <string>
 #include "Card.h"
 #include "CardFactory.h"
 #include "Chain_Base.h"
@@ -22,6 +20,8 @@ template <class T> class Chain : public Chain_Base {
 	std::vector<Card*> list;  // keeps track of the bean cards       // those two attributes might go to the interface
 	char typeCards[10]; // keeps track of the type of cards chain is holding
 
+
+
 public:
 	// I am adding a default constructor, not so sure about it, might get deleted
 
@@ -33,13 +33,11 @@ public:
 	Chain() {
 		//std::cout << "In the Chain constructor: ";
 		//std::cout << list.size() << "\n";
-		std::regex pattern("[^class(\s)+]+"); // extract the type of a card class using regex
-		std::smatch matches;
 		std::string s = typeid(T).name();
-		if (std::regex_search(s, matches, pattern)) {
-			//std::cout << "the matches are: " << matches[0] << " \n";
-			strcpy_s(typeCards, sizeof(typeCards), matches[0].str().c_str());
-		}
+		//std::cout << "The s is : " << s << "\n";
+		int size{ static_cast<int>(s.size()) };
+		//std::cout << "the matches are: " << matches[0] << " \n";
+		strcpy_s(typeCards, sizeof(typeCards), s.substr(6,size-6).c_str());
 		//std::cout << "The type is: " << typeCards << "\n";
 	}
 
@@ -68,9 +66,10 @@ public:
 
 	~Chain() {
 		//delete typeCards;
-		std::cout << "I am the chain destructor\n";
+		//std::cout << "I am the chain destructor\n";
 		//delete typeCards;
 	}
+
 
 	/// <summary>
 	/// This redefinition of += adds a new card to a chain
@@ -96,6 +95,7 @@ public:
 		// ch is copied by value here, copy constructor used
 		// output << "Elements de la liste vector: \n";
 		output << ch.typeCards << "\t";// maybe three tabs
+		//std::cout << "The size of chain is: " << ch.list.size()<< "\n";
 
 		for (int i{ 0 }; i < ch.list.size(); i++) {
 			(*(ch.list.at(i))).print(output);
@@ -119,6 +119,11 @@ public:
 	/// <param name="output"></param>
 	void print(std::ostream& output) const {
 		output << *this;
+	}
+
+
+	const char* getChainType() const {
+		return typeCards;
 	}
 };
 
@@ -155,16 +160,22 @@ template <class T> Chain<T>::Chain(std::istream& input, const CardFactory* facto
 }
 
 template <class T> Chain<T>& Chain<T>::operator+=(Card* cardToAdd) {
-		try {
-			if (typeid(*cardToAdd).name() != typeid(T).name()) {
-				throw "IllegalType Exception when trying to add a card to a chain";
-			}
-			list.push_back(cardToAdd);
-			return *this;
+	//if (this == nullptr) {
+	//	// we need to create the chain first
+	//	this = new Chain<(typeid(*cardToAdd))>();
+	//}// TODO, do not call this method if you know this is gonna be nullptr, delegate this check to another function before doing this
+	try {
+		if (typeid(*cardToAdd).name() != typeid(T).name()) {
+			throw "IllegalType Exception when trying to add a card to a chain";
 		}
-		catch (const char* exception) {
-			std::cerr << "Error: " << exception << "\n";
-		}
+		list.push_back(cardToAdd);
+		return *this;
+	}
+	catch (const char* exception) {
+		std::cout << "trying to add the following card: " << cardToAdd->getName() << " to\n";
+		std::cout << *this;
+		std::cerr << "Error: " << exception << "\n";
+	}
 }
 
 template <class T> int Chain<T>::sell(){

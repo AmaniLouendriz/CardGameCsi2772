@@ -69,4 +69,7 @@ public:
 	/// <param name="trade">The tradeArea object to print</param>
 	/// <returns>A reference to the file or the stream that we used to write on</returns>
 	friend std::ostream& operator << (std::ostream& output, TradeArea trade);
+
+
+	std::list<Card*> getListOfCards();
 };
