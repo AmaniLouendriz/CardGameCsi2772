@@ -39,6 +39,7 @@ public:
 		//std::cout << "the matches are: " << matches[0] << " \n";
 		strcpy_s(typeCards, sizeof(typeCards), s.substr(6,size-6).c_str());
 		//std::cout << "The type is: " << typeCards << "\n";
+		list = {};
 	}
 
 	/// <summary>
@@ -125,6 +126,10 @@ public:
 	const char* getChainType() const {
 		return typeCards;
 	}
+
+	void operator=(Chain<T>* a);
+
+	void emptyList();
 };
 
 template <class T> Chain<T>::Chain(std::istream& input, const CardFactory* factory) {
@@ -194,8 +199,14 @@ template <class T> int Chain<T>::sell(){
 
 	while (maxCoins >= 1) {
 		requiredCards = (*(list.at(0))).getCardsPerCoin(maxCoins);
-		restOfCards = sizeOfChain % requiredCards;
-		similarCards = sizeOfChain / requiredCards;
+		if (requiredCards != 0) {
+			restOfCards = sizeOfChain % requiredCards;// TODO, divisions by 0 error
+			similarCards = sizeOfChain / requiredCards;
+		}
+		else {
+			break;
+		}
+		
 		moneyToEarn += (maxCoins * similarCards);
 		sizeOfChain = restOfCards;
 		maxCoins--;
@@ -215,5 +226,39 @@ template <class T> int Chain<T>::sell(){
 template <class T> int Chain<T>::getLengthChain() {
 	return list.size();
 }
+
+//template <class T> void Chain<T>::assign(Chain<T>& a) {
+//	std::cout << "assignement operator\n";
+//	if (this != &a) {
+//		strcpy_s(typeCards, sizeof(typeCards), a.typeCards);// copy the type of cards
+//		list.clear();
+//		for (Card* item : a.list) {
+//			this->list.push_back(item); // fill vector
+//		}
+//	}
+//	return a;
+//}
+
+template <class T> void Chain<T>::operator=(Chain<T>* a) {
+	std::cout << "assignement operator\n";
+
+	if (this != &a) {
+		strcpy_s(typeCards, sizeof(typeCards), a.typeCards);// copy the type of cards
+		this->list.clear();
+		std::cout << typeCards << "\n";
+		std::cout << this->list.at(0);
+		std::cout << a;
+
+		for (Card* item : a.list) {
+			this->list.push_back(item); // fill vector
+		}
+	}
+}
+
+template <class T> void Chain<T>::emptyList() {
+	this->list.clear();
+}
+
+
 
 

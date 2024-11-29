@@ -354,6 +354,8 @@ void Player::playCard() {
 	// if we are here, one possibility could be that the player reached the number of chains he can have and he doesnt have enough money to buy a third one
 	// then he should sell
 
+	std::cout << "You have reached your maximum amount of chains, and you dont have enough coins to purchase the right for a third one, so you will have to sell one of your chains\n";
+
 	int max{ 0 };// we will use this to sell the chain with maximum coins
 	char type{};
 	int index{ -1 }; // index of the chain to sell
@@ -376,12 +378,19 @@ void Player::playCard() {
 	}
 	else {
 		// none of the chains have a maximum profit for the user, select the first one
-		std::cout << "error happens here\n";
-		//*(listOfChains.at(0)) = *utils::constructChain(cardFirst->getName()[0]);// TODO
-		listOfChains.at(0)->print(std::cout);
-		std::cout << "the other one\n";
-		utils::constructChain(cardFirst->getName()[0])->print(std::cout);
-		(*listOfChains.at(0)).operator+=(cardFirst);
+		std::cout << "You have to sell your first chain because all your chains did not reach the minimum number of cards to get profit back \n";
+
+
+		//listOfChains.at(0)->print(std::cout);// old chain that should be overwritten
+
+		listOfChains.at(0)->emptyList();// empty the old chain
+
+		listOfChains.at(0) = (utils::constructChain(cardFirst->getName()[0]));// substitite the old chain with the new one
+
+		listOfChains.at(0)->operator+=(cardFirst);// add the card
+
+		//std::cout << "after the thing\n";
+		//listOfChains.at(0)->print(std::cout);
 	}
 }
 
