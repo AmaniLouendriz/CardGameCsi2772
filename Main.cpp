@@ -94,6 +94,48 @@ bool static askShowHandDiscardCard() {
 }
 
 
+// Draw cards from deck and place them in trade area
+void static drawCardDeck(int numberToDraw, Deck* deck, TradeArea* tr) {
+    if (deck->size() == 0) {
+        std::cout << "Sorry, the cards can't be drawn because the deck is empty\n";
+    }
+    else {
+        std::cout << "drawing " << numberToDraw << " cards from the deck and placing them in the tradearea\n";
+        int count{ 0 };
+        while (count != numberToDraw) {
+            *tr += deck->draw();
+            count++;
+        }
+    }
+}
+
+// Draw a card from deck and put it at the back of a players hand
+void static drawCardDeck(int numberToDraw, Deck* deck, Hand& h) {
+    if (deck->size() == 0) {
+        std::cout << "Sorry, the cards can't be drawn because the deck is empty\n";
+    }
+    else {
+        std::cout << "drawing " << numberToDraw << " cards from the deck and placing them at the back of your hand\n";
+        int count{ 0 };
+        while (count != numberToDraw) {
+            h += deck->draw();
+            count++;
+        }
+    }
+}
+
+
+
+bool static askToAddCard(char c) {
+    std::cout << "For the card: " << c << ". Would you like to add it to one of your chains?\n";
+    char answer[2]{};
+    std::cin >> answer;
+    if (answer[0] == 'y') {
+        return true;
+    }
+    return false;
+}
+
 
 int main() {
 
@@ -146,15 +188,12 @@ int main() {
     //    }
     }
     else {
-        // we assume that names do not contain white space chars
+        std::cout << std::endl;
+        std::cout << "Enter the name of the first player (no whitespaces): ";
+        std::cin >> p1_name;
 
         std::cout << std::endl;
-        std::cout << "Enter the name of the first player: ";
-        std::cin >> p1_name;
-        //std::cout << "The name of the first player is: " << p1_name;// DEBUGGING, TO BE REMOVED
-          
-        std::cout << std::endl;
-        std::cout << "Enter the name of the second player: ";
+        std::cout << "Enter the name of the second player (no whitespaces): ";
         std::cin >> p2_name;
         std::cout << std::endl;
 
@@ -162,7 +201,7 @@ int main() {
         p2 = new Player(p2_name);
 
         deck = cardFact->getDeck();
-        tb = new Table(*p1, *p2, *disPile, *trAr, deck, *cardFact);// Why sending as references, why not as pointers?
+        tb = new Table(*p1, *p2, *disPile, *trAr, deck, *cardFact);
         Card* cc{};
         Player* pp{};
         // Distribution de 5 cartes à chaque joueur
@@ -173,26 +212,13 @@ int main() {
             pp = tb->getPlayer(i);
             for (int j = 0; j < 5; ++j) {
                 // Draw the card from the deck
-                cc = deck.draw();// not sure whether the draw should be the first or the last element of the deck, right now Im doing the last
+                cc = deck.draw();
                 // add this card to the players hand
                 pp->addCardToHand(cc);
             }
         }
 
-        // DEBUGGING, PLS LEAVE THE FOLLOWING LINES FOR NOW COMMENTED
-
-       /* std::cout << "after giving to each player their hands: \n";
-        std::cout << *p1;
-        std::cout << std::endl;
-        std::cout << *p2;
-        std::cout << "The hand of the first player is: \n";
-        std::cout << p1->getHand();
-        std::cout << std::endl;
-        std::cout << "The hand of the second player is: \n";
-        std::cout << p2->getHand();
-        std::cout << std::endl;*/
     }
-
     //Boucle du jeu
     Card* cardDrawn{};
 
@@ -208,10 +234,6 @@ int main() {
             
             //tb->saveTable();
             //cout << "Game saved. Exiting." << endl;
-            //delete p1;
-            //delete p2;
-            //delete disPile;
-            //delete trAr;
             //delete tb;
             return 0;
         }
@@ -238,7 +260,7 @@ int main() {
                 char card = wantsToChainCards();
                 while (card != '\0') {
                     // meaning the player wants to add a card from the trade area to his chains
-                    int index{ current->addCardToChain(card) };
+                    int index{ current->addCardToChain(trAr->getCard(card)) };
                     if (index == -1) {
                         std::cout << "Sorry, you can't get that card from the trade area because you either have no chain with that card type or you have reached your maximum number of chains\n";
                     }
@@ -253,16 +275,6 @@ int main() {
                     *disPile += trAr->trade(card->getName());
                 }
 
-                // this was replaced by the above
-                //for (Card* card : trAr->getListOfCards()) {
-                    //if (current->canChainCard(card)) {
-                        //current->addToChain(trAr->trade(card->getName()));
-                    //}
-                    //else {
-                        //*disPile += trAr->trade(card->getName());
-                    //}
-                //}
-                // this was replaced by the above
                 std::cout << "The player now has the following:FOR DEBUGGING ONLY\n";
                 std::cout << *current << std::endl;
                 std::cout << "The trading area is now: FOR DEBUGGING ONLY\n";
@@ -270,7 +282,6 @@ int main() {
             }
 
             // Le joueur joue une carte
-            //std::cout << "until now is it good?\n";TODO
             std::cout << "You play the first top card from your hand\n";
             current->playCard();
             std::cout << "You have now: \n" << *current << std::endl;
@@ -279,57 +290,65 @@ int main() {
             }
 
             // ask player whether he wants to show his hand
-            if (askShowHandDiscardCard()) {
-                std::cout << "Your hand is: \n";
-                std::cout << current->getHand();
-                std::cout << std::endl;
-                bool valid{ false };
-                while (!valid) {
-                    char cc{}; std::cout << "which arbitrary card would you like to discard?(enter just the symbol;e.g: R):  "; std::cin >> cc;
-                    int index{ current->getHand().doesCardExist(cc) };
-                    if (index != -1) {
-                        Card* cardDiscarded { current->getHand()[index] };// remove the card at index
-                        (*disPile) += cardDiscarded;
-                        valid = true;
-                    }
-                    else {
-                        std::cout << "this card doesn't exist on your hand\n";
+            if (current->getHand().numCards() != 0) {
+                if (askShowHandDiscardCard()) {
+                    std::cout << "Your hand is: \n";
+                    std::cout << current->getHand();
+                    std::cout << std::endl;
+                    bool valid{ false };
+                    while (!valid) {
+                        char cc{}; std::cout << "which arbitrary card would you like to discard?(enter just the symbol;e.g: R):  "; std::cin >> cc; std::cout << "You wanna discard: " << cc << "\n";
+                        int index{ current->getHand().doesCardExist(cc) };
+                        std::cout << "the index is: " << index << "\n";
+                        if (index != -1) {
+                            Card* cardDiscarded{ current->getHand()[index] };// remove the card at index
+                            std::cout << "after discarding the card, your hand is: JUST FOR DEBUGGING\n";
+                            std::cout << current->getHand();
+                            (*disPile) += cardDiscarded;
+                            valid = true;
+                        }
+                        else {
+                            std::cout << "this card doesn't exist on your hand\n";
+                        }
                     }
                 }
             }
 
+            // Draw cards from deck and place them in trade area
+            drawCardDeck(3, &deck, trAr);
+
+            // Gestion des cartes dans TradeArea
+            while (disPile->size() > 0 && trAr->legal(disPile->top())) {
+                *trAr += disPile->pickUp();
+            }
+
+            std::cout << "The trade area is now: " << *trAr << "\n";
 
 
-    //        // Gestion des cartes dans TradeArea
-    //        while (disPile->size() > 0 && trAr->legal(disPile->top())) {
-    //            *trAr += disPile->pickUp();
-    //        }
+            for (Card* card : trAr->getListOfCards()) {
+                bool res { askToAddCard(card->getName()[0])};
+                if (res) {
+                    current->addCardToChain(card);
+                }
+            }
 
-    //        // Tirage de nouvelles cartes
-    //        for (int j = 0; j < 2; ++j) {
-    //            if (deck->size() > 0) {
-    //                current->takeCard(deck->draw());
-    //            }
-    //        }
-
-    //        // Affiche l'état actuel
-    //        cout << *current << endl;
-    //        cout << "Discard Pile: ";
-    //        disPile->print(cout);
-    //        cout << endl;
+            // Drawing two cards from Deck and adding them to the back of the player's hand
+            drawCardDeck(2, &deck, current->getHand());
+            
+            // Affiche l'état actuel
+            std::cout << "Current state: \n";
+            std::cout << *current << std::endl;
+            std::cout << "Discard Pile: ";
+            disPile->print(std::cout);
+            std::cout << std::endl;
         }
     }
 
-    //// Fin du jeu
-    //tb->win(winner_name);
-    //cout << "The winner is: " << winner_name << endl;
+    // Fin du jeu
+    tb->win(winner_name);
+    std::cout << "The winner is: " << winner_name << ". Congrats!" << std::endl;
 
-    //// Nettoyage
-    delete tb; // the table destructor would delete all of the below
-   /* delete p2;
-    delete p1;
-    delete trAr;
-    delete disPile;*/
-
+    // Nettoyage
+    delete tb; // the table destructor would delete all of the objects
     return 0;
 }

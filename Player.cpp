@@ -218,52 +218,63 @@ Hand& Player::addCardToHand(Card* card) {
 }
 
 
-int Player::addCardToChain(char symbol) {
-	// this symbol is valid, we did a verification in the main
-	int index{-1};
-	for (int i{ 0 }; i < getNumChains(); i++) {
-		if (listOfChains.at(i) != nullptr) {
-			if (listOfChains.at(i)->getChainType()[0] == symbol) {
-				// we found a chain that has the same card type
-				index = i;
-				break;
-			}
-		}
-		else {
-			// in the case of a player that had purchased the right to have a third chain, he would have an empty nullptr chain, so here we are taking this into account
-			Chain_Base* ch = utils::constructChain(symbol);
-			*listOfChains.at(i) = *ch;// TODO
-			index = i;
-			break;
-		}
-	}
+void Player::playCard() {
+	//// this symbol is valid, we did a verification in the main
+	//int index{-1};
+	//for (int i{ 0 }; i < getNumChains(); i++) {
+	//	if (listOfChains.at(i) != nullptr) {
+	//		if (listOfChains.at(i)->getChainType()[0] == symbol) {
+	//			// we found a chain that has the same card type
+	//			index = i;
+	//			break;
+	//		}
+	//	}
+	//	else {
+	//		// in the case of a player that had purchased the right to have a third chain, he would have an empty nullptr chain, so here we are taking this into account
+	//		Chain_Base* ch = utils::constructChain(symbol);
+	//		*listOfChains.at(i) = *ch;// TODO
+	//		index = i;
+	//		break;
+	//	}
+	//}
 
-	if (index == -1) {
-		// no chain was found that has the same card type as the one the player wants to have
-		if (getNumChains() < getMaxNumChains()) {
-			// make a new chain and add it to the players list
-			Chain_Base* ch = utils::constructChain(symbol);
-			listOfChains.push_back(ch);
-			index = getNumChains() - 1;
-		}
-		else {
-			// maximum is reached
-			// see if the player has enough coins to purchase a third chain
-			// TODO: this if can be a method
-			if (getNumCoins() >= 2) {
-				std::cout << "You have reached your maximum number of chains but you can buy the right for a third one for 2 coins. Do you wish to proceed?(y/n):  ";
-				char answer[2]{};
-				std::cin >> answer;
-				if (answer[0] == 'y') {
-					buyThirdChain();
-					Chain_Base* ch = utils::constructChain(symbol);
-					*listOfChains.at(getNumChains()-1) = *ch;//TODO
-					index = getNumChains()-1;
-				}
-			}
-		}
+	//if (index == -1) {
+	//	// no chain was found that has the same card type as the one the player wants to have
+	//	if (getNumChains() < getMaxNumChains()) {
+	//		// make a new chain and add it to the players list
+	//		Chain_Base* ch = utils::constructChain(symbol);
+	//		listOfChains.push_back(ch);
+	//		index = getNumChains() - 1;
+	//	}
+	//	else {
+	//		// maximum is reached
+	//		// see if the player has enough coins to purchase a third chain
+	//		// TODO: this if can be a method
+	//		if (getNumCoins() >= 2) {
+	//			std::cout << "You have reached your maximum number of chains but you can buy the right for a third one for 2 coins. Do you wish to proceed?(y/n):  ";
+	//			char answer[2]{};
+	//			std::cin >> answer;
+	//			if (answer[0] == 'y') {
+	//				buyThirdChain();
+	//				Chain_Base* ch = utils::constructChain(symbol);
+	//				*listOfChains.at(getNumChains()-1) = *ch;//TODO
+	//				index = getNumChains()-1;
+	//			}
+	//		}
+	//	}
+	//}
+	//return index;
+	Card* cardFirst{ playerHand->top() };// get the player's card, without removing it for now
+	//std::cout << "the cardFirst is: " << *cardFirst << "\n";
+	//std::cout << "the list of chains size is: " << listOfChains.size();
+	int res{ addCardToChain(cardFirst) };
+
+	if (res == -1) {
+		std::cout << "The card wasn't added to your chains\n";
 	}
-	return index;
+	else {
+		playerHand->play();
+	}
 }
 
 
@@ -297,17 +308,14 @@ int Player::addCardToChain(char symbol) {
 //}
 
 
-void Player::playCard() {
-	Card* cardFirst{ playerHand->play()};// get the player's card 
-	//std::cout << "the cardFirst is: " << *cardFirst << "\n";
-	//std::cout << "the list of chains size is: " << listOfChains.size();
+int Player::addCardToChain(Card* cardFirst) {
 	// check first if the list of chains is empty
 	if (listOfChains.size() == 0) {
 		Chain_Base* ch { utils::constructChain(cardFirst->getName()[0]) };// constructing a new chain of the same type as card
 		listOfChains.push_back(ch);
 		*listOfChains.at(0) += cardFirst;
 		std::cout << "card: " << cardFirst->getName()[0] << "  has been added to one of the your chains\n";
-		return;
+		return 1;
 	}
 
 	for (Chain_Base* ch : listOfChains) { // see if the player can add this card to an existing chain or if he has space to make a new chain for that card
@@ -315,7 +323,8 @@ void Player::playCard() {
 			if (ch->getChainType() == cardFirst->getName()) {
 				// card first can be added here
 				(*ch) += cardFirst; // card has been added to this chain
-				return;
+				std::cout << "card: " << cardFirst->getName()[0] << "  has been added to one of your existing chains\n";
+				return 1;
 			}
 		}
 		else {
@@ -323,7 +332,8 @@ void Player::playCard() {
 			Chain_Base* cb = utils::constructChain(cardFirst->getName()[0]);
 			*ch = *cb;// new chain with the card type made
 			(*ch) += cardFirst;// new card added
-			return;
+			std::cout << "You already bought a right to have a third chain. A new chain is created, and card: " << cardFirst->getName()[0] << " has been added to it\n";
+			return 1;
 		}
 	}
 
@@ -333,7 +343,7 @@ void Player::playCard() {
 		listOfChains.push_back(ch);
 		*listOfChains.at(listOfChains.size() - 1) += cardFirst;
 		std::cout << "card: " << cardFirst->getName()[0] << "  has been added to one of the your chains\n";
-		return;
+		return 1;
 	}
 
 	// if we are here, meaning the player needs to sell a chain he has, but before, check if he can buy the right to have a third one
@@ -344,17 +354,18 @@ void Player::playCard() {
 		std::cin >> answer;
 		if (answer[0] == 'y') {
 			buyThirdChain();
-			Chain_Base* ch = utils::constructChain(cardFirst->getName()[0]);
-			*listOfChains.at(getNumChains() - 1) = *ch;//TODO
+			listOfChains.at(getNumChains() - 1) = utils::constructChain(cardFirst->getName()[0]);
+			*listOfChains.at(getNumChains() - 1) += cardFirst;
+			std::cout << " A new third chain was added\n";
 			//int index = getNumChains() - 1;
-			return;
+			return 1;
 		}
 	}
 
 	// if we are here, one possibility could be that the player reached the number of chains he can have and he doesnt have enough money to buy a third one
 	// then he should sell
 
-	std::cout << "You have reached your maximum amount of chains, and you dont have enough coins to purchase the right for a third one, so you will have to sell one of your chains\n";
+	std::cout << "You have reached your maximum amount of chains, and you dont have enough coins or you dont want to to purchase the right for a third one, so you will have to sell one of your chains\n";
 
 	int max{ 0 };// we will use this to sell the chain with maximum coins
 	char type{};
@@ -371,10 +382,16 @@ void Player::playCard() {
 
 	// what happens to a chain we sell? do we add it to the trade area or sth? TODO
 	if (index != -1) {
+		std::cout << "By selling your chain at position: " << (index + 1) << ", You would get " << max << " coins extra.\n";
 		*this += max;
 		type = (*cardFirst).getName()[0];
-		*(listOfChains.at(index)) = *utils::constructChain(type);// override the existing chain
-		(*listOfChains.at(index)).operator+=(cardFirst);
+		listOfChains.at(index)->emptyList();// empty the old chain we sold
+
+		listOfChains.at(index) = utils::constructChain(type);// override the existing chain
+
+		listOfChains.at(index)->operator+=(cardFirst);
+		std::cout << "The corresponding chain has been sold and a new chain was constructed instead\n";
+		return 1;
 	}
 	else {
 		// none of the chains have a maximum profit for the user, select the first one
@@ -391,7 +408,9 @@ void Player::playCard() {
 
 		//std::cout << "after the thing\n";
 		//listOfChains.at(0)->print(std::cout);
+		return 1;
 	}
+	return -1;
 }
 
 

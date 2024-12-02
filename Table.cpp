@@ -2,21 +2,21 @@
 
 
 //Retourne true si un joueur a gagne en donnant le nom par reference
-//bool Table::win(std::string& pName) {
-//    if (deck->size() > 0) {
-//        return false;
-//    }
-//    if (p1->getNumCoins() > p2->getNumCoins()) {
-//        pName = p1->getName();
-//    }
-//    else if (p1->getNumCoins() < p2->getNumCoins()) {
-//        pName = p2->getName();
-//    }
-//    else { //  equality
-//       pName = "Equality";
-//    }
-//    return true;
-//}
+bool Table::win(std::string& pName) {
+    if (deck->size() > 0) {
+        return false;
+    }
+    if (p1->getNumCoins() > p2->getNumCoins()) {
+        pName = p1->getName();
+    }
+    else if (p1->getNumCoins() < p2->getNumCoins()) {
+        pName = p2->getName();
+    }
+    else { //  equality
+       pName = "Equality";
+    }
+    return true;
+}
 //
 ////Affiche la main du joueur courrant
 //void Table::printHand(bool showAll) {

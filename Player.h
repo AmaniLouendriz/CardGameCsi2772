@@ -109,7 +109,7 @@ public:
 	}
 
 
-	int addCardToChain(char symbol);
+	int addCardToChain(Card* card);
 
 
 

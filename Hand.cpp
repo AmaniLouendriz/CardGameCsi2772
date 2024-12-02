@@ -52,26 +52,27 @@ Card* Hand::top() const {
 Card* Hand::operator[](int pos) {
     if (pos < 0 || pos >= playerHand.size()) throw std::out_of_range("Index out of range");
 
-    std::queue<Card*, std::list<Card*>> temp;
+    std::queue<Card*, std::list<Card*>> temp{};
     Card* card = nullptr;
+    int size{ static_cast<int>(playerHand.size()) };
 
-    for (int i = 0; i < playerHand.size(); ++i) {
-        Card* current = playerHand.front();
-        playerHand.pop();
-
+    for (int i = 0; i < size; ++i) {
         if (i == pos) {
-            card = current;
+            card = playerHand.front();
         }
         else {
-            temp.push(current);
+            temp.push(playerHand.front());
         }
+        playerHand.pop();
     }
+
+    std::cout << "The card is : " << card << "\n";// card is here a nullptr
 
     playerHand = temp;// TODO, SUSPICIOUS ABOUT THIS WHITH NO COPY CONSTRUCTORif
     return card;
 }
 
-//Retourne le opmbre de cartes
+//Retourne le nombre de cartes
 int Hand::numCards() const {
     return playerHand.size();
 }
@@ -114,7 +115,7 @@ int Hand::doesCardExist(char cc) {   // verify that this card exist before tryin
     std::queue <Card*, std::list<Card*>> temp;
     temp = playerHand; // TODO, I dont think this is fine
     int indexOfCard{ -1 };
-    for (int i{ 0 }; i < temp.size(); i++) {
+    for (int i{ 0 }; i < playerHand.size(); i++) {
         if (temp.front()->getName()[0] == cc) {
             // we found the card
             indexOfCard = i;

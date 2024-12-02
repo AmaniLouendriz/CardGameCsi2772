@@ -135,4 +135,15 @@ std::list<Card*> TradeArea::getListOfCards() {
 }
 
 
+Card* TradeArea::getCard(char c) {
+	for (std::list<Card*>::iterator iter = container.begin(); iter != container.end(); iter++) {
+		if ((*iter)->getName()[0] == c) {
+			return *iter;
+		}
+	}
+
+	return nullptr;
+}
+
+
 

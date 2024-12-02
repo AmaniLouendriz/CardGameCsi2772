@@ -72,4 +72,6 @@ public:
 
 
 	std::list<Card*> getListOfCards();
+
+	Card* getCard(char c);
 };
