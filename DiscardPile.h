@@ -33,18 +33,13 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const DiscardPile& disPile);
     
     //Destructeur
-    ~DiscardPile() {
-        // cardFactory would delete cards, not here   TODO
-
-        /*for (auto& card : cards) {
-            delete card;
-        }*/
-    }
+    ~DiscardPile() = default;
 
     void save(std::ostream& out) const;
     //Retourne le nombre de cartes
-    size_t size() const {   // why not int TODO
+    size_t size() const {
         return cards.size();
     }
+
 
 };

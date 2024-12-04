@@ -5,19 +5,19 @@
 
 
 
-DiscardPile::DiscardPile(std::istream& input, const CardFactory* cardFact) {// TODO, this should change, we dont instantiate cards here
+DiscardPile::DiscardPile(std::istream& input, const CardFactory* cardFact) {
     std::string line;
     while (std::getline(input, line)) {
         Card* card = nullptr;
 
-        if (line == "B") card = new Blue;
-        else if (line == "C") card = new Chili;
-        else if (line == "S") card = new Stink;
-        else if (line == "G") card = new Green;
-        else if (line == "s") card = new soy;
-        else if (line == "b") card = new black;
-        else if (line == "R") card = new Red;
-        else if (line == "g") card = new garden;
+        if (line == "B") card = cardFact->getBlue();
+        else if (line == "C") card = cardFact->getChili();
+        else if (line == "S") card = cardFact->getStink();
+        else if (line == "G") card = cardFact->getGreen();
+        else if (line == "s") card = cardFact->getSoy();
+        else if (line == "b") card = cardFact->getBlack();
+        else if (line == "R") card = cardFact->getRed();
+        else if (line == "g") card = cardFact->getGarden();
         else throw std::invalid_argument("Unknown card type: " + line);
 
         if (card) cards.push_back(card);

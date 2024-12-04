@@ -115,6 +115,10 @@ public:
 
 	void playCard();
 
+	void setHand(Hand* h) {
+		playerHand = h;
+	}
+
 
 
 

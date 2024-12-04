@@ -48,40 +48,43 @@ Chain_Base* Player::constructChain(std::istream& input, std::string& type,const 
 /// <param name="input">Input stream from where we will read info</param>
 /// <param name="factory">The factory object responsible for creating cards</param>
 Player::Player(std::istream& input, const CardFactory* factory) {
-	//SOME STUFF SHOULD CHANGE HERE BECAUSE NOW, the space between a players name and coins is just 1 tab
-
-	input.seekg(0, std::ios::ate);// go to the end of the file
-	long sizeFile = input.tellg();// get the file size
 	input.seekg(0, std::ios::beg);
 	std::getline(input, playerName, '\t');// get the player name
-	int offSet_name_tab = playerName.size() + 1;// adding 1 to the offset because when we print a player, we add 1 tab before we print the number of coins.
 
-	input.seekg(offSet_name_tab, std::ios::beg);// moove the cursor by the offset
 	std::string coins {};
 	std::getline(input, coins, ' ');// put the coins in this string var
 	coinsEarned = std::stoi(coins);
-	int offSet_name_tab_ToEnd = offSet_name_tab + coins.size() + 1 + 6;// this offset takes into account the whole first line from the player name to the line break, we add 1 to count for the space between "number" and "coins", we add 6 because "coins" takes 5 chars and there is a line break at the end
-	// from now on, it is not guaranteed that the chains would be present, TODO: check before parsing
-	int parsed = offSet_name_tab_ToEnd;
+	
 	std::string chainType{};
 	Chain_Base* chain{};
 	std::string line{};
-	while (parsed < sizeFile) {
-		input.seekg(parsed, std::ios::beg);
-		std::getline(input, chainType, '\t');
-		chain = constructChain(input, chainType, factory);
-		listOfChains.push_back(chain);
-		// as for now, first chain was constructed
-		std::getline(input, line, '\n');// to get the offset by which to move the cursor
-		parsed = parsed + line.size() + 1;// 1 is add to count for the line break
+	
+	std::string tmp{};
+	std::getline(input, tmp, '\n');// remove any garbage input
+
+	while (std::getline(input, line)) {
+		if (!line.empty()) {
+			// extracting the chain
+			size_t tabPos = line.find('\t'); // Finding the first tab character
+			if (tabPos != std::string::npos) {
+				chainType = line.substr(0, tabPos);
+			}
+
+			std::istringstream lineStream(line);
+
+			chain = constructChain(lineStream, chainType, factory);
+
+			listOfChains.push_back(chain);
+		}
 	}
 
 	if (listOfChains.size() == 3) {
 		thirdChainRight = true;
 	}
-	// how do I initialize the player hand
-
-
+	else {
+		thirdChainRight = false;
+	}
+	playerHand = new Hand;
 }
 
 
@@ -355,7 +358,7 @@ int Player::addCardToChain(Card* cardFirst) {
 		if (answer[0] == 'y') {
 			buyThirdChain();
 			listOfChains.at(getNumChains() - 1) = utils::constructChain(cardFirst->getName()[0]);
-			*listOfChains.at(getNumChains() - 1) += cardFirst;
+			listOfChains.at(getNumChains() - 1)->operator+=(cardFirst);
 			std::cout << " A new third chain was added\n";
 			//int index = getNumChains() - 1;
 			return 1;

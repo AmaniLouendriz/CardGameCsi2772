@@ -1,20 +1,9 @@
 #include "Main.h"
 
 
-//void cleanup(Player* player1, Player* player2, DiscardPile* disPile, TradeArea* tradeArea, Deck* deck, Table* table) {
-//    delete player1;
-//    delete player2;
-//    delete disPile;
-//    delete tradeArea;
-//    delete deck;
-//    delete table;
-//}
-
-/// <summary>
-/// Checks whether the card symbol is legal
-/// </summary>
-/// <param name="card"></param>
-/// <returns></returns>
+void cleanup(Table* table) {
+    delete table;
+}
 
 bool static isSymbolLegal(char card) {
     if (card == 'R' || card == 'B' || card == 'C' || card == 'S' || card == 'G' || card == 's' || card == 'b' || card == 'g') {
@@ -51,7 +40,7 @@ std::string static mapToName(char type) {
     return "";
 }
 
-bool static wantsToChainCards() {
+char static wantsToChainCards() {
     std::cout << "Do you want to add cards from the trade area to your chains?(y/n)  ";
     char answer[2]{};
     std::cin >> answer;
@@ -163,29 +152,38 @@ int main() {
     if (user_input[0] == 'y') {
         // Case where the user wants to reload game from file
         
-    //    tb = new Table(*p1, *p2, *disPile, *trAr, *deck, *cardFact);
+        tb = new Table(*p1, *p2, *disPile, *trAr, deck, *cardFact);
 
-    //    // Charge les données sauvegardées
-    //    try {
-    //        tb->reloadDeck();
-    //        deck = tb->getDeck();
+        // Charge les données sauvegardées
+        try {
+            tb->reloadDeck();
+            //std::cout << "after reloading, the reloaded deck is: \n";
+            deck = tb->getDeck();
+            //std::cout << deck;
+            // Deck did reload successfully
 
-    //        tb->reloadPlayer(1);
-    //        tb->reloadPlayer(2);
-    //        p1 = tb->getPlayer(0);
-    //        p2 = tb->getPlayer(1);
+            tb->reloadPlayer(1);
+            tb->reloadPlayer(2);
+            p1 = tb->getPlayer(0);
+            p2 = tb->getPlayer(1);
+            /*std::cout << "after reloading the two players: \n";
+            std::cout<<"player1\n";
+            std::cout << *p1;
+            std::cout << std::endl;
+            std::cout << "player2\n";
+            std::cout << *p2;*/
 
-    //        tb->reloadDiscardPile();
-    //        disPile = tb->getDiscardPile();
+            tb->reloadDiscardPile();
+            disPile = tb->getDiscardPile();
 
-    //        tb->reloadTradeArea();
-    //        trAr = tb->getTradeArea();
-    //    }
-    //    catch (const std::runtime_error& e) {
-    //        std::cerr << "Error loading saved game: " << e.what() << std::endl;
-    //        cleanup(p1, p2, disPile, trAr, deck, tb);
-    //        return -1;
-    //    }
+            tb->reloadTradeArea();
+            trAr = tb->getTradeArea();
+        }
+        catch (const std::runtime_error& e) {
+            std::cerr << "Error loading saved game: " << e.what() << std::endl;
+            cleanup(tb);
+            return -1;
+        }
     }
     else {
         std::cout << std::endl;
@@ -231,10 +229,9 @@ int main() {
 
         if (user_input[0] == 'y') {
             // in case the player wants to pause and save
-            
-            //tb->saveTable();
-            //cout << "Game saved. Exiting." << endl;
-            //delete tb;
+            tb->saveTable();
+            std::cout << "Game saved. Exiting." << std::endl;
+            delete tb;
             return 0;
         }
 
@@ -251,7 +248,7 @@ int main() {
             cardDrawn = deck.draw();
             current->addCardToHand(cardDrawn);
             std::cout << "The card has been added to your hand\n";
-            std::cout << "Your hand is: REMOVE THE HAND GETTER AFTERWARD in the player, Im just using it for debugging\n";// TODO
+            std::cout << "Your hand is: \n";
             std::cout << current->getHand();
 
             // Ajouter des cartes de TradeArea
@@ -266,9 +263,13 @@ int main() {
                     }
                     else {
                         Card* gottenCard{ trAr->trade(mapToName(card)) };
-                        (current->operator[](i + 1)) += gottenCard;// the card is drawn from the trade area and added to the players cards
                     }
-                    card = wantsToChainCards();
+                    if (trAr->numCards() > 0) {
+                        card = wantsToChainCards();
+                    }
+                    else {
+                        break;
+                    }
                 }
                 // if the player doesn't want the cards, they should be discarded  (in the discard pile)
                 for (Card* card : trAr->getListOfCards()) {
@@ -285,8 +286,10 @@ int main() {
             std::cout << "You play the first top card from your hand\n";
             current->playCard();
             std::cout << "You have now: \n" << *current << std::endl;
-            if (askForRepetition()) {
-               current->playCard();// if the player wants, we would play a card again
+            if (current->getHand().numCards() > 0) {
+                if (askForRepetition()) {
+                    current->playCard();// if the player wants, we would play a card again
+                }
             }
 
             // ask player whether he wants to show his hand
@@ -305,6 +308,7 @@ int main() {
                             std::cout << "after discarding the card, your hand is: JUST FOR DEBUGGING\n";
                             std::cout << current->getHand();
                             (*disPile) += cardDiscarded;
+                            std::cout << "The discard pile is: " << *disPile << std::endl;
                             valid = true;
                         }
                         else {
@@ -316,6 +320,7 @@ int main() {
 
             // Draw cards from deck and place them in trade area
             drawCardDeck(3, &deck, trAr);
+            std::cout << "tradearea immediately after drawing three cards is: " << trAr << std::endl;
 
             // Gestion des cartes dans TradeArea
             while (disPile->size() > 0 && trAr->legal(disPile->top())) {
@@ -329,6 +334,7 @@ int main() {
                 bool res { askToAddCard(card->getName()[0])};
                 if (res) {
                     current->addCardToChain(card);
+                    trAr->trade(card->getName());// remove the card from the trade area
                 }
             }
 

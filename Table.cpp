@@ -32,33 +32,58 @@ Player* Table::getPlayer(int id) {
 }
 
 //Enregistre l'etat de la table 
-//void Table::saveTable() {
-//    std::ofstream deckFile("Saved-Deck.txt", std::ios::trunc);
-//    if (!deckFile) throw std::runtime_error("Could not open Saved-Deck.txt");
-//    deck->saveDeck(deckFile);
-//    deckFile.close();
-//
-//    std::ofstream dpFile("Saved-DiscardPile.txt", std::ios::trunc);
-//    if (!dpFile) throw std::runtime_error("Could not open Saved-DiscardPile.txt");
-//    disPile->save(dpFile);
-//    dpFile.close();
-//
-//    std::ofstream taFile("Saved-TradeArea.txt", std::ios::trunc);
-//    if (!taFile) throw std::runtime_error("Could not open Saved-TradeArea.txt");
-//    tradeAr->saveTradeArea(taFile);
-//    taFile.close();
-//
-//    p1->savePlayer(1);
-//    p2->savePlayer(2);
-//}
+void Table::saveTable() {
+    std::ofstream deckFile("Saved-Deck.txt", std::ios::trunc);
+    if (!deckFile) throw std::runtime_error("Could not open Saved-Deck.txt");
+    deckFile << *deck;
+    // Saving deck
+    
+    deckFile.close();
+
+    std::ofstream dpFile("Saved-DiscardPile.txt", std::ios::trunc);
+    if (!dpFile) throw std::runtime_error("Could not open Saved-DiscardPile.txt");
+    // Saving discard pile
+    disPile->save(dpFile);
+    dpFile.close();
+
+    std::ofstream taFile("Saved-TradeArea.txt", std::ios::trunc);
+    if (!taFile) throw std::runtime_error("Could not open Saved-TradeArea.txt");
+    // Saving trade area
+    taFile << *tradeAr;
+    taFile.close();
+    std::ofstream playerFile1("Saved-Player1.txt", std::ios::trunc);
+    if (!playerFile1) throw std::runtime_error("Could not open Saved-Player1.txt");
+    // saving players
+    //1
+    playerFile1 << *p1;
+    playerFile1.close();
+    //2
+    std::ofstream playerFile2("Saved-Player2.txt", std::ios::trunc);
+    if (!playerFile2) throw std::runtime_error("Could not open Saved-Player2.txt");
+    playerFile2 << *p2;
+    playerFile2.close();
+
+    // saving hands
+    //1
+    std::ofstream playerFileHand1("Saved-PlayerH1.txt", std::ios::trunc);
+    if (!playerFileHand1) throw std::runtime_error("Could not open Saved-PlayerH1");
+    p1->getHand().saveHand(playerFileHand1);
+    playerFileHand1.close();
+    // saving hands
+    // 2
+    std::ofstream playerFileHand2("Saved-PlayerH2.txt", std::ios::trunc);
+    if (!playerFileHand2) throw std::runtime_error("Could not open Saved-PlayerH2");
+    p2->getHand().saveHand(playerFileHand2);
+    playerFileHand2.close();
+}
 
 //Recharge le deck du jeu
 void Table::reloadDeck() {
-    std::ifstream deckFile("Saved-Deck.txt");
+    std::ifstream deckFile("Saved-Deck.txt", std::ios::in | std::ios::binary | std::ios::ate);
     if (!deckFile.is_open()) {
         throw std::runtime_error("Saved-Deck.txt not found");
     }
-    // *deck = Deck(deckFile, *cardFact);
+    *deck = Deck(deckFile, cardFact);
 }
 
 //Recharge discardPile
@@ -67,16 +92,16 @@ void Table::reloadDiscardPile() {
     if (!dpFile.is_open()) {
         throw std::runtime_error("Saved-DiscardPile.txt not found");
     }
-    //*disPile = DiscardPile(dpFile, cardFact);
+    *disPile = DiscardPile(dpFile, cardFact);
 }
 
 //Recharge TradeArea
 void Table::reloadTradeArea() {
-    std::ifstream trArFile("Saved-TradeArea.txt");
+    std::ifstream trArFile("Saved-TradeArea.txt", std::ios::in | std::ios::binary | std::ios::ate);
     if (!trArFile.is_open()) {
         throw std::runtime_error("Saved-TradeArea.txt not found");
     }
-    //*tradeAr = TradeArea(trArFile, cardFact);
+    *tradeAr = TradeArea(trArFile, cardFact);
 }
 
 
@@ -96,4 +121,48 @@ std::ostream& operator<<(std::ostream& output, const Table& tb) {
     output << "Trade Area: " << *(tb.tradeAr) << "\n";
     output << "_______________________\n";
     return output;
+}
+
+Deck Table::getDeck() {
+    return *deck;
+}
+
+
+void Table::reloadPlayer(int i) {
+    if (i == 1) {
+        std::ifstream playerFile1("Saved-Player1.txt", std::ios::in | std::ios::binary | std::ios::ate);
+        if (!playerFile1.is_open()) {
+            throw std::runtime_error("Saved-Player1.txt not found");
+        }
+        p1 = new Player(playerFile1, cardFact);
+
+        std::ifstream playerFileH1("Saved-PlayerH1.txt");
+        if (!playerFileH1.is_open()) {
+            throw std::runtime_error("Saved-PlayerH1.txt not found");
+        }
+        Hand* hand1 = new Hand(playerFileH1, cardFact);
+        p1->setHand(hand1);        
+    }
+    else {
+        std::ifstream playerFile2("Saved-Player2.txt", std::ios::in | std::ios::binary | std::ios::ate);
+        if (!playerFile2.is_open()) {
+            throw std::runtime_error("Saved-Player2.txt not found");
+        }
+        p2 = new Player(playerFile2, cardFact);
+
+        std::ifstream playerFileH2("Saved-PlayerH2.txt");
+        if (!playerFileH2.is_open()) {
+            throw std::runtime_error("Saved-PlayerH2.txt not found");
+        }
+        Hand* hand2 = new Hand(playerFileH2, cardFact);
+        p2->setHand(hand2);
+    }   
+}
+
+DiscardPile* Table::getDiscardPile() {
+    return disPile;
+}
+
+TradeArea* Table::getTradeArea() {
+    return tradeAr;
 }

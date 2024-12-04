@@ -69,9 +69,7 @@ Deck::Deck(std::istream& input, const CardFactory* factory) {
 /// <summary>
 /// Deck destructor
 /// </summary>
-Deck::~Deck() {
-	//std::cout << "\ndestructing my deck\n";
-}
+Deck::~Deck() = default;
 
 
 /// <summary>

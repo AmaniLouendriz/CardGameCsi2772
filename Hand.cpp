@@ -7,14 +7,14 @@ Hand::Hand(std::istream& input, const CardFactory* cardFact) {
             Card* card = nullptr;
 
             //Associe la carte a la chaine 
-            if (line == "B") card = new Blue;
-            else if (line == "C") card = new Chili;
-            else if (line == "S") card = new Stink;
-            else if (line == "G") card = new Green;
-            else if (line == "s") card = new soy;
-            else if (line == "b") card = new black;
-            else if (line == "R") card = new Red;
-            else if (line == "g") card = new garden;
+            if (line == "B") card = cardFact->getBlue();
+            else if (line == "C") card = cardFact->getChili();
+            else if (line == "S") card = cardFact->getStink();
+            else if (line == "G") card = cardFact->getGreen();
+            else if (line == "s") card = cardFact->getSoy();
+            else if (line == "b") card = cardFact->getBlack();
+            else if (line == "R") card = cardFact->getRed();
+            else if (line == "g") card = cardFact->getGarden();
             else throw std::invalid_argument("Unknown card type: " + line);
 
             if (card) {
@@ -113,7 +113,7 @@ Hand& Hand::operator+=(Card* card) {
 
 int Hand::doesCardExist(char cc) {   // verify that this card exist before trying to remove it
     std::queue <Card*, std::list<Card*>> temp;
-    temp = playerHand; // TODO, I dont think this is fine
+    temp = playerHand;
     int indexOfCard{ -1 };
     for (int i{ 0 }; i < playerHand.size(); i++) {
         if (temp.front()->getName()[0] == cc) {

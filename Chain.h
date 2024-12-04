@@ -133,35 +133,71 @@ public:
 };
 
 template <class T> Chain<T>::Chain(std::istream& input, const CardFactory* factory) {
-	std::string typeOfCard{}; // Rethink using string here
+	std::string typeOfCard{};
 
-	//if (input.is_open()) {
-		std::getline(input, typeOfCard, '\t');
-		bool ok{ true };
-		char card{ 'X' };
+	std::getline(input, typeOfCard, '\t');
+	bool ok{ true };
+	char card{ 'X' };
 
-		if ((typeOfCard != "Blue") && (typeOfCard != "Chili") && (typeOfCard != "Stink") && (typeOfCard != "Green") && (typeOfCard != "soy")
-			&& (typeOfCard != "black") && (typeOfCard != "Red") && (typeOfCard != "garden")) {
-			ok = false; // corrupted file
-		}
+	if ((typeOfCard != "Blue") && (typeOfCard != "Chili") && (typeOfCard != "Stink") && (typeOfCard != "Green") && (typeOfCard != "soy")
+		&& (typeOfCard != "black") && (typeOfCard != "Red") && (typeOfCard != "garden")) {
+		ok = false; // corrupted file
+	}
 
-		//std::cout << "generating the chaine:  ";
+	// UPDATE THIS TODO, also, if card is a line break, stop parsing
 
-		// UPDATE THIS TODO, also, if card is a line break, stop parsing
-
-		if (ok) {
+	if (ok) {
+		if (typeOfCard == "Blue") {
 			while (input >> card) {
-				/*std::cout << card;
-				std::cout << " ";*/
+				Card* blueCard = factory->getBlue();
+				list.push_back(blueCard);
+			}
+		}
+		else if (typeOfCard == "Chili") {
+			while (input >> card) {
+				Card* chiliCard = factory->getChili();
+				list.push_back(chiliCard);
+			}
+		}
+		else if (typeOfCard == "Stink") {
+			while (input >> card) {
+				Card* stinkCard = factory->getStink();
+				list.push_back(stinkCard);
+			}
+		}
+		else if (typeOfCard == "Green") {
+			while (input >> card) {
+				Card* greenCard = factory->getGreen();
+				list.push_back(greenCard);
+			}
+		}
+		else if (typeOfCard == "soy") {
+			while (input >> card) {
+				Card* soyCard = factory->getSoy();
+				list.push_back(soyCard);
+			}
+		}
+		else if (typeOfCard == "black") {
+			while (input >> card) {
+				Card* blackCard = factory->getBlack();
+				list.push_back(blackCard);
+			}
+		}
+		else if (typeOfCard == "Red") {
+			while (input >> card) {
 				Card* redCard = factory->getRed();
 				list.push_back(redCard);
 			}
 		}
-	//}
-	//else {
-		//std::cout << "ouverture impossible \n";
-	//}
-
+		else if (typeOfCard == "garden") {
+			while (input >> card) {
+				Card* gardenCard = factory->getGarden();
+				list.push_back(gardenCard);
+			}
+		}
+		//std::cout << "the matches are: " << matches[0] << " \n";
+		strcpy_s(typeCards,sizeof(typeCards), typeOfCard.c_str());
+	}
 }
 
 template <class T> Chain<T>& Chain<T>::operator+=(Card* cardToAdd) {

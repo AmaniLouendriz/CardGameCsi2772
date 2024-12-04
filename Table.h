@@ -31,7 +31,6 @@ public:
     // TODO, why is it just default ?  I changed it from just default to this, do I have to delete other objects other than cardFact
     ~Table() {
         delete cardFact;
-        delete deck;
         delete tradeAr;
         delete disPile;
         delete p2;
@@ -45,5 +44,10 @@ public:
     void reloadDeck();
     void reloadDiscardPile();
     void reloadTradeArea();
+    void reloadPlayer(int i);
     Player* getPlayer(int);
+    Deck getDeck();
+    DiscardPile* getDiscardPile();
+    TradeArea* getTradeArea();
+
 };

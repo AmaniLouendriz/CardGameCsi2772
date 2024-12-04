@@ -81,14 +81,15 @@ bool TradeArea::legal(const Card* const cardToAdd) {
 /// <param name="cardType">Type of card to be deleted</param>
 /// <returns>A pointer to the newly deleted card</returns>
 Card* TradeArea::trade(const std::string cardType) {
-	std::list<Card*>::const_iterator it{ container.cbegin() };
+	std::list<Card*>::iterator it{ container.begin() };
 	Card* cardErased{};
-	while (it != container.cend()) {
+	while (it != container.end()) {
 		if ((**it).getName() == cardType) {
 			cardErased = (*it);
 			container.erase(it);
 			break;
 		}
+		it++;
 	}
 	return cardErased;
 }
@@ -99,7 +100,7 @@ Card* TradeArea::trade(const std::string cardType) {
 /// </summary>
 /// <returns>The number of cards in the trade area</returns>
 int TradeArea::numCards() {
-	return container.size();
+	return static_cast<int>(container.size());
 }
 
 
