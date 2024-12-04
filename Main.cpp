@@ -205,6 +205,7 @@ int main() {
         // Distribution de 5 cartes à chaque joueur
         std::cout << "Before giving the cards to the players, the deck is: \n";
         std::cout << deck;
+        std::cout << std::endl;
         for (int i = 0; i < MAX_NUM_PLAYER; ++i) {
             // get the player first
             pp = tb->getPlayer(i);
@@ -276,9 +277,9 @@ int main() {
                     *disPile += trAr->trade(card->getName());
                 }
 
-                std::cout << "The player now has the following:FOR DEBUGGING ONLY\n";
+                std::cout << "The player now has the following:\n";
                 std::cout << *current << std::endl;
-                std::cout << "The trading area is now: FOR DEBUGGING ONLY\n";
+                std::cout << "The trading area is now: \n";
                 std::cout << *trAr << std::endl;
             }
 
@@ -300,12 +301,12 @@ int main() {
                     std::cout << std::endl;
                     bool valid{ false };
                     while (!valid) {
-                        char cc{}; std::cout << "which arbitrary card would you like to discard?(enter just the symbol;e.g: R):  "; std::cin >> cc; std::cout << "You wanna discard: " << cc << "\n";
+                        char cc{}; std::cout << "which arbitrary card would you like to discard?(enter just the symbol;e.g: R):  "; std::cin >> cc; std::cout << "You would like to discard: " << cc << "\n";
                         int index{ current->getHand().doesCardExist(cc) };
-                        std::cout << "the index is: " << index << "\n";
+                        //std::cout << "the index is: " << index << "\n";
                         if (index != -1) {
                             Card* cardDiscarded{ current->getHand()[index] };// remove the card at index
-                            std::cout << "after discarding the card, your hand is: JUST FOR DEBUGGING\n";
+                            std::cout << "after discarding the card, your hand is: \n";
                             std::cout << current->getHand();
                             (*disPile) += cardDiscarded;
                             std::cout << "The discard pile is: " << *disPile << std::endl;
@@ -320,7 +321,6 @@ int main() {
 
             // Draw cards from deck and place them in trade area
             drawCardDeck(3, &deck, trAr);
-            std::cout << "tradearea immediately after drawing three cards is: " << trAr << std::endl;
 
             // Gestion des cartes dans TradeArea
             while (disPile->size() > 0 && trAr->legal(disPile->top())) {

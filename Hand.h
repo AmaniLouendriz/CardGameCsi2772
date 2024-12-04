@@ -50,5 +50,6 @@ public:
         clearHand();
     }
 
+    // Verifying if a card exists in the players hand
     int doesCardExist(char cc);
 };

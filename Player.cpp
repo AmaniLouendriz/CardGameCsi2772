@@ -8,7 +8,7 @@ Player::Player(std::string& name) {
 	playerName = name;
 	coinsEarned = 0;
 	thirdChainRight = false;
-	playerHand = new Hand; // UNSAFE with nullptr, hopefully, this is better
+	playerHand = new Hand;
 }
 
 Chain_Base* Player::constructChain(std::istream& input, std::string& type,const CardFactory* factory) {
@@ -222,51 +222,6 @@ Hand& Player::addCardToHand(Card* card) {
 
 
 void Player::playCard() {
-	//// this symbol is valid, we did a verification in the main
-	//int index{-1};
-	//for (int i{ 0 }; i < getNumChains(); i++) {
-	//	if (listOfChains.at(i) != nullptr) {
-	//		if (listOfChains.at(i)->getChainType()[0] == symbol) {
-	//			// we found a chain that has the same card type
-	//			index = i;
-	//			break;
-	//		}
-	//	}
-	//	else {
-	//		// in the case of a player that had purchased the right to have a third chain, he would have an empty nullptr chain, so here we are taking this into account
-	//		Chain_Base* ch = utils::constructChain(symbol);
-	//		*listOfChains.at(i) = *ch;// TODO
-	//		index = i;
-	//		break;
-	//	}
-	//}
-
-	//if (index == -1) {
-	//	// no chain was found that has the same card type as the one the player wants to have
-	//	if (getNumChains() < getMaxNumChains()) {
-	//		// make a new chain and add it to the players list
-	//		Chain_Base* ch = utils::constructChain(symbol);
-	//		listOfChains.push_back(ch);
-	//		index = getNumChains() - 1;
-	//	}
-	//	else {
-	//		// maximum is reached
-	//		// see if the player has enough coins to purchase a third chain
-	//		// TODO: this if can be a method
-	//		if (getNumCoins() >= 2) {
-	//			std::cout << "You have reached your maximum number of chains but you can buy the right for a third one for 2 coins. Do you wish to proceed?(y/n):  ";
-	//			char answer[2]{};
-	//			std::cin >> answer;
-	//			if (answer[0] == 'y') {
-	//				buyThirdChain();
-	//				Chain_Base* ch = utils::constructChain(symbol);
-	//				*listOfChains.at(getNumChains()-1) = *ch;//TODO
-	//				index = getNumChains()-1;
-	//			}
-	//		}
-	//	}
-	//}
-	//return index;
 	Card* cardFirst{ playerHand->top() };// get the player's card, without removing it for now
 	//std::cout << "the cardFirst is: " << *cardFirst << "\n";
 	//std::cout << "the list of chains size is: " << listOfChains.size();
@@ -279,36 +234,6 @@ void Player::playCard() {
 		playerHand->play();
 	}
 }
-
-
-//Chain_Base* Player::constructChain(char type) {
-//	Chain_Base* cb1{};
-//	if (type == 'R') {
-//		cb1 = new Chain<Red>();
-//	}
-//	else if (type == 'B') {
-//		cb1 = new Chain<Blue>();
-//	}
-//	else if (type == 'C') {
-//		cb1 = new Chain<Chili>();
-//	}
-//	else if (type == 'S') {
-//		cb1 = new Chain<Stink>();
-//	}
-//	else if (type == 'G') {
-//		cb1 = new Chain<Green>();
-//	}
-//	else if (type == 's') {
-//		cb1 = new Chain<soy>();
-//	}
-//	else if (type == 'b') {
-//		cb1 = new Chain<black>();
-//	}
-//	else if (type == 'g') {
-//		cb1 = new Chain<garden>();
-//	}
-//	return cb1;
-//}
 
 
 int Player::addCardToChain(Card* cardFirst) {

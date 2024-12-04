@@ -2,11 +2,11 @@
 #include <iostream>
 #include "CardFactory.h"
 
+/// <summary>
+/// Interface that all chains derive from
+/// </summary>
 class Chain_Base {
 public:
-	//Chain_Base() {}
-	//virtual Chain_Base(std::istream& input, const CardFactory* factory);
-
 	virtual int sell() = 0;
 	virtual int getLengthChain() = 0;
 	virtual void print(std::ostream& output) const = 0;

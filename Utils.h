@@ -1,6 +1,10 @@
 #pragma once
 #include "Chain_Base.h"
 #include "Chain.h"
+
+/// <summary>
+/// A generic utils namespace
+/// </summary>
 namespace utils {
     static Chain_Base* constructChain(char type) {
         Chain_Base* cb1{};
@@ -28,8 +32,6 @@ namespace utils {
         else if (type == 'g') {
             cb1 = new Chain<garden>();
         }
-        //std::cout << "after constructing: \n";
-        //cb1->print(std::cout);
         return cb1;
     }
 }

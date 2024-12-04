@@ -8,8 +8,6 @@
 
 
 
-// PLEASE KEEP COMMENTS FOR NOW, ILL REMOVE THEN ONCE ETH IS DONE
-
 /// <summary>
 /// The Chain class that keeps a list of all bean cards a player has
 /// </summary>
@@ -23,7 +21,6 @@ template <class T> class Chain : public Chain_Base {
 
 
 public:
-	// I am adding a default constructor, not so sure about it, might get deleted
 
 	/// <summary>
 	/// A default Chain constructor that initialized the "typeCards" instance variable by extracting it from the typeid of the generic parameter T
@@ -31,14 +28,9 @@ public:
 	
 
 	Chain() {
-		//std::cout << "In the Chain constructor: ";
-		//std::cout << list.size() << "\n";
 		std::string s = typeid(T).name();
-		//std::cout << "The s is : " << s << "\n";
 		int size{ static_cast<int>(s.size()) };
-		//std::cout << "the matches are: " << matches[0] << " \n";
 		strcpy_s(typeCards, sizeof(typeCards), s.substr(6,size-6).c_str());
-		//std::cout << "The type is: " << typeCards << "\n";
 		list = {};
 	}
 
@@ -56,8 +48,6 @@ public:
 	/// <param name="ch">Chain to copy attributes from</param>
 	
 	Chain(const Chain& ch) {
-		// std::cout << "une recopie se fait";
-
 		strcpy_s(typeCards, sizeof(typeCards),ch.typeCards);// copy the type of cards
 		for (Card* item : ch.list) {
 			list.push_back(item); // fill vector
@@ -66,9 +56,7 @@ public:
 
 
 	~Chain() {
-		//delete typeCards;
-		//std::cout << "I am the chain destructor\n";
-		//delete typeCards;
+
 	}
 
 
@@ -93,15 +81,11 @@ public:
 	/// <returns>a reference to the output stream where the printing took place</returns>
 	/// 
 	friend std::ostream& operator << (std::ostream& output, Chain<T> ch) {
-		// ch is copied by value here, copy constructor used
-		// output << "Elements de la liste vector: \n";
 		output << ch.typeCards << "\t";// maybe three tabs
-		//std::cout << "The size of chain is: " << ch.list.size()<< "\n";
 
 		for (int i{ 0 }; i < ch.list.size(); i++) {
 			(*(ch.list.at(i))).print(output);
 			output << " ";
-			//output << "type of element in vector: " << typeid(*(ch.list.at(i))).name();
 		}
 		output << "\n";
 		return output;
@@ -115,20 +99,30 @@ public:
 	int getLengthChain();
 
 	/// <summary>
-	/// TODO
+	/// Prints the chain
 	/// </summary>
-	/// <param name="output"></param>
+	/// <param name="output">Output stream on which to print</param>
 	void print(std::ostream& output) const {
 		output << *this;
 	}
 
-
+	/// <summary>
+	/// Getter for the chain type
+	/// </summary>
+	/// <returns>chain type(Blue,Red etc)</returns>
 	const char* getChainType() const {
 		return typeCards;
 	}
 
+	/// <summary>
+	/// Assignement operator for chains
+	/// </summary>
+	/// <param name="a">chain to copy into the new one</param>
 	void operator=(Chain<T>* a);
 
+	/// <summary>
+	/// Removes cards from the chain
+	/// </summary>
 	void emptyList();
 };
 
@@ -143,8 +137,6 @@ template <class T> Chain<T>::Chain(std::istream& input, const CardFactory* facto
 		&& (typeOfCard != "black") && (typeOfCard != "Red") && (typeOfCard != "garden")) {
 		ok = false; // corrupted file
 	}
-
-	// UPDATE THIS TODO, also, if card is a line break, stop parsing
 
 	if (ok) {
 		if (typeOfCard == "Blue") {
@@ -195,16 +187,11 @@ template <class T> Chain<T>::Chain(std::istream& input, const CardFactory* facto
 				list.push_back(gardenCard);
 			}
 		}
-		//std::cout << "the matches are: " << matches[0] << " \n";
 		strcpy_s(typeCards,sizeof(typeCards), typeOfCard.c_str());
 	}
 }
 
 template <class T> Chain<T>& Chain<T>::operator+=(Card* cardToAdd) {
-	//if (this == nullptr) {
-	//	// we need to create the chain first
-	//	this = new Chain<(typeid(*cardToAdd))>();
-	//}// TODO, do not call this method if you know this is gonna be nullptr, delegate this check to another function before doing this
 	try {
 		if (typeid(*cardToAdd).name() != typeid(T).name()) {
 			throw "IllegalType Exception when trying to add a card to a chain";
@@ -222,7 +209,6 @@ template <class T> Chain<T>& Chain<T>::operator+=(Card* cardToAdd) {
 template <class T> int Chain<T>::sell(){
 	int sizeOfChain { static_cast <int>(list.size()) };
 
-	//std::cout << "\nThe size of chain in the sell method is: " << sizeOfChain;
 
 	// assuming the list is non empty
 	int maxCoins{ 4 };
@@ -262,18 +248,6 @@ template <class T> int Chain<T>::sell(){
 template <class T> int Chain<T>::getLengthChain() {
 	return list.size();
 }
-
-//template <class T> void Chain<T>::assign(Chain<T>& a) {
-//	std::cout << "assignement operator\n";
-//	if (this != &a) {
-//		strcpy_s(typeCards, sizeof(typeCards), a.typeCards);// copy the type of cards
-//		list.clear();
-//		for (Card* item : a.list) {
-//			this->list.push_back(item); // fill vector
-//		}
-//	}
-//	return a;
-//}
 
 template <class T> void Chain<T>::operator=(Chain<T>* a) {
 	std::cout << "assignement operator\n";

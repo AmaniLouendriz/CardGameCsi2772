@@ -45,7 +45,7 @@ CardFactory::CardFactory() {
 	// Create chili cards
 	for (int i{ 0 }; i < CHILI_COUNT; i++) {
 		Chili* item = new Chili();
-		chiliCards.push_back(item);// copy constructor involved ?
+		chiliCards.push_back(item);
 	}
 
 	// Create Stink Cards

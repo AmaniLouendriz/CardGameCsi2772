@@ -70,8 +70,16 @@ public:
 	/// <returns>A reference to the file or the stream that we used to write on</returns>
 	friend std::ostream& operator << (std::ostream& output, TradeArea trade);
 
-
+	/// <summary>
+	/// Getter of all cards present in the trade area
+	/// </summary>
+	/// <returns>A list of cards</returns>
 	std::list<Card*> getListOfCards();
 
+	/// <summary>
+	/// Gets from a trade area a pointer to a card, which code equals c
+	/// </summary>
+	/// <param name="c">Card symbol</param>
+	/// <returns>Pointer to the card</returns>
 	Card* getCard(char c);
 };

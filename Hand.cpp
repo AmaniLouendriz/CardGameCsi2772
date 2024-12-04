@@ -66,9 +66,9 @@ Card* Hand::operator[](int pos) {
         playerHand.pop();
     }
 
-    std::cout << "The card is : " << card << "\n";// card is here a nullptr
+    //std::cout << "The card is : " << card << "\n";// card is here a nullptr
 
-    playerHand = temp;// TODO, SUSPICIOUS ABOUT THIS WHITH NO COPY CONSTRUCTORif
+    playerHand = temp;
     return card;
 }
 

@@ -21,7 +21,8 @@ public:
         return out;
     };
 
-    // DELETE COPY CONSTRUCTOR AND ASSIGNMENET OPERATOR HERE
+    Card& operator=(const Card&) = delete;
+
 };
 
 //Classe pour la carte Blue

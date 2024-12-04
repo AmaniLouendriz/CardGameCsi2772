@@ -1,4 +1,3 @@
-// UNCOMMENT ONCE THIS FUNCTIONALITY HAS BEEN IMPLEMENTED
 
 #pragma once
 #include <stdexcept>
@@ -9,9 +8,6 @@
 #include  "CardFactory.h"
 
 
-//#include <fstream>
-//#include <stdexcept>
-//#include <iostream>
 
 class Table {
     Player* p1;
@@ -28,7 +24,6 @@ public:
         :p1(&player1), p2(&player2), disPile(&discardPile), tradeAr(&tradeArea), deck(&deck), cardFact(&cardFactory), currentPlayer(0){}
     
     //Destructeur
-    // TODO, why is it just default ?  I changed it from just default to this, do I have to delete other objects other than cardFact
     ~Table() {
         delete cardFact;
         delete tradeAr;

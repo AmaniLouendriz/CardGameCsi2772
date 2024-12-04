@@ -8,13 +8,11 @@
 class CardFactory;
 
 class Deck : public std::vector<Card*>{
-	// why would it derive from std::vector??
 public:
 	/// <summary>
 	/// Default deck constructor
 	/// </summary>
 	Deck() {
-		//std::cout << "default constructor for deck\n";
 	}
 
 

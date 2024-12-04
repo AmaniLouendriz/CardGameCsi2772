@@ -6,7 +6,7 @@
 #include "Utils.h"
 
 class Player {
-	std::string playerName;// TODO: not sure whether this should be a reference or no
+	std::string playerName;
 	int coinsEarned;
 	bool thirdChainRight;
 	std::vector<Chain_Base*> listOfChains;
@@ -102,19 +102,31 @@ public:
 	/// <returns></returns>
 	Hand& addCardToHand(Card* card);
 
-
+	/// <summary>
+	/// Getter of a players hand
+	/// </summary>
+	/// <returns>A reference to the players hand</returns>
 	Hand& getHand() {
-		// HAND SHOULD BE PRIVATE, JUST FOR DEBUGGING PURPOSES
 		return *playerHand;
 	}
 
-
+	/// <summary>
+	/// Add a card to one of the players chain
+	/// </summary>
+	/// <param name="card">Card to add</param>
+	/// <returns>Success code</returns>
 	int addCardToChain(Card* card);
 
 
-
+	/// <summary>
+	/// Method that a player uses to  play a top card from his hand
+	/// </summary>
 	void playCard();
 
+	/// <summary>
+	/// Method that sets the hand of the player, used when reloading hand from file
+	/// </summary>
+	/// <param name="h">Hand that player should have</param>
 	void setHand(Hand* h) {
 		playerHand = h;
 	}

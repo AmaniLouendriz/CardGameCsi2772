@@ -23,7 +23,7 @@ class CardFactory {
 	static std::random_device rd;
 
 	/// <summary>
-	/// The first 8 counts with lower cases tracks the position of the card we point to
+	/// The first 8 counts with lower cases track the position of the card we point to
 	/// </summary>
 	static int redCount;
 	static int blueCount;
@@ -61,6 +61,5 @@ public:
 	black* getBlack() const;
 	garden* getGarden() const;
 	Deck getDeck() const;
-	// should add getters for other colors as well TODO
 	static CardFactory* getFactory(); // should verify whether the object is already created, if yes, return a pointer to it. if not, create it using the constructor and return its pointer
 };
